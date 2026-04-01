@@ -68,8 +68,8 @@ public class GlobalHandlerException {
                 .body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()));
     }
 
-    @ExceptionHandler(RecursoNoEncontrado.class)
-    public ResponseEntity<ErrorResponse> handleRecursoNoEncontradoException(RecursoNoEncontrado e) {
+    @ExceptionHandler(RecursoNoEncontradoException.class)
+    public ResponseEntity<ErrorResponse> handleRecursoNoEncontradoException(RecursoNoEncontradoException e) {
         log.warn("No se encontró el recurso: {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()));
@@ -86,6 +86,13 @@ public class GlobalHandlerException {
     @ExceptionHandler(EntidadRelacionadaException.class)
     public ResponseEntity<ErrorResponse> handleEntidadRelacionadaException(EntidadRelacionadaException e) {
         log.warn("Error al eliminar un recurso: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage()));
+    }
+    
+    @ExceptionHandler(ReglaNegocioException.class)
+    public ResponseEntity<ErrorResponse> handleReglaNegocioException(ReglaNegocioException e) {
+        log.warn("Conflicto de regla de negocio: {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(new ErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage()));
     }

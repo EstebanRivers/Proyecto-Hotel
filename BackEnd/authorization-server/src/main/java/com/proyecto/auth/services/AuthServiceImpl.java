@@ -1,6 +1,6 @@
 package com.proyecto.auth.services;
 
-import java.time.Instant;
+/*import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
@@ -27,10 +27,10 @@ import com.nimbusds.jwt.SignedJWT;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j
+@Slf4j*/
 public class AuthServiceImpl implements AuthService {
 
-    private final UserDetailsService userDetailsService;
+    /*private final UserDetailsService userDetailsService;
 
     private final RSAKey rsaKey;
 
@@ -80,5 +80,5 @@ public class AuthServiceImpl implements AuthService {
         signedJWT.sign(signer);
 
         return new TokenResponse(signedJWT.serialize());
-    }
+    }*/
 }

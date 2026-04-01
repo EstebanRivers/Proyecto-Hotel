@@ -1,12 +1,12 @@
 package com.proyecto.commons.exceptions;
 
-public class RecursoNoEncontrado extends RuntimeException {
+public class RecursoNoEncontradoException extends RuntimeException {
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public RecursoNoEncontrado(String message) {
+	public RecursoNoEncontradoException(String message) {
         super(message);
     }
 }

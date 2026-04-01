@@ -1,6 +1,6 @@
 package com.proyecto.gateway.configuration;
 
-import java.util.List;
+/*import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,10 +12,10 @@ import org.springframework.security.oauth2.server.resource.authentication.Reacti
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 
-@Configuration
+@Configuration*/
 public class SecurityConfig {
 
-	@Bean
+	/* @Bean
 	SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
 		
 		http
@@ -54,5 +54,5 @@ public class SecurityConfig {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
         return new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter);
-	}
+	}*/
 }
