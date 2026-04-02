@@ -2,19 +2,19 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "../environments/environment";
 import { catchError, map, Observable, of, throwError } from "rxjs";
-import { HuespedRequest, HuespedResponse } from "../models/huesped.model";
+import { HuespedRequest, HuespedResponse } from "../models/Huesped.model";
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class HuespedService {
+export class HuespedesService {
 
   private apiUrl: string = environment.apiUrl.concat('huespedes')
 
   constructor(private http: HttpClient) { }
 
-  getHuesped(): Observable<HuespedResponse[]> {
+  getHuespedes(): Observable<HuespedResponse[]> {
     return this.http.get<HuespedResponse[]>(this.apiUrl).pipe(
       map(huespedes => huespedes.sort()),
       catchError(error => {

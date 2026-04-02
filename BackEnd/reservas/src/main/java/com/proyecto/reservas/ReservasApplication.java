@@ -3,7 +3,7 @@ package com.proyecto.reservas;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.proyecto.reservas",  "com.proyecto.commons"})
 public class ReservasApplication {
 
 	public static void main(String[] args) {

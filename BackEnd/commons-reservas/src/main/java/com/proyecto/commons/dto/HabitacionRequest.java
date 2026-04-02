@@ -20,7 +20,7 @@ public record HabitacionRequest(
 
         @NotNull(message = "La capacidad de la habitacion es requerida")
         @Positive(message = "La capacidad tiene que ser mayor a 1")
-		@Min(value = 2, message = "La capacidad tiene que ser mayor a 1")
+		@Min(value = 1, message = "La capacidad tiene que ser mayor a 1")
         Integer capacidad,
 
         @NotNull(message = "El precio es requerido")

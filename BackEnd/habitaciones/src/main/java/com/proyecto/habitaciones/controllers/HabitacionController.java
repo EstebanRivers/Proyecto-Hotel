@@ -24,9 +24,14 @@ public class HabitacionController extends CommonController<HabitacionRequest, Ha
 	}
 	
 	@GetMapping("/id-habitacion/{id}")
-	public ResponseEntity<HabitacionResponse> obtenerMedicoPorIdSinEstado(@PathVariable @Positive(message= "El ID debe ser positivo w") Long id){
+	public ResponseEntity<HabitacionResponse> obtenerHabitacionPorIdSinEstado(@PathVariable @Positive(message= "El ID debe ser positivo w") Long id){
 		return ResponseEntity.ok(service.obtenerHabitacionPorIdSinEstado(id));
 	}
+	
+	@PutMapping("/interno/{idHabitacion}/estadoHabitacion/{idEstadoHabitacion}")
+    public ResponseEntity<HabitacionResponse> cambiarDisponibilidad(@PathVariable Long idHabitacion, @PathVariable Long idEstadoHabitacion) {
+        return ResponseEntity.ok(service.cambiarEstadoHabitacion(idHabitacion, idEstadoHabitacion));
+    }
 
     @PutMapping("/{idHabitacion}/estadoHabitacion/{idEstadoHabitacion}")
     public ResponseEntity<HabitacionResponse> cambiarDisponibilidadManual(@PathVariable Long idHabitacion, @PathVariable Long idEstadoHabitacion) {

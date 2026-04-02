@@ -1,1 +1,124 @@
-<p>habitaciones works!</p>
+<div class="container-fluid">
+    <div class="card shadow-sm mt-5">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold">HABITACIONES</h5>
+            <button class="btn btn-success btn-sm fw-bold" (click)="toggleForm()">
+                <i class="fa-solid fa-plus"></i>Nueva habitación
+            </button>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped table-bordered mb-0">
+                <thead class="table-dark">
+                    <tr style="text-align: center;">
+                        <th scope="col">#</th>
+                        <th scope="col">Número</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col">Capacidad</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="text-align: center;" *ngFor="let habitacion of listaHabitaciones; let i = index">
+                        <td>{{ habitacion.id }}</td>
+                        <td>{{ habitacion.numero }}</td>
+                        <td>{{ habitacion.tipo }}</td>
+                        <td>{{ habitacion.precio }}</td>
+                        <td>{{ habitacion.capacidad }}</td>
+                        <td>{{ habitacion.estadoHabitacion }}</td>
+                        <td *ngIf="showActions">
+                            <button class="btn btn-primary btn-sm" (click)="editHabitacion(habitacion)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm" (click)="deleteHabitacion(habitacion.id)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal fade" #habitacionModalRef tabindex="-1" aria-labelledby="habitacionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="habitacionModalLabel">{{ modalText }}</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <form [formGroup]="habitacionForm" (ngSubmit)="onSubmit()">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Número Habitación</label>
+                                <input type="number" class="form-control" formControlName="numero" min="1" placeholder="Número de habitación">
+                                <div *ngIf="habitacionForm.get('numero')?.invalid && habitacionForm.get('numero')?.touched"
+                                    class="text-danger small mt-1">
+                                    <span *ngIf="habitacionForm.get('numero')?.errors?.['required']">
+                                        El número de habitación es requerido
+                                    </span>
+                                    <span *ngIf="habitacionForm.get('numero')?.errors?.['min']">
+                                        El número de habitación debe ser mayor a 0                                 
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="tipo" class="form-label">Tipo Habitación</label>
+                                <select id="tipo" class="form-select" formControlName="tipo">
+                                    <option value="individual">Individual</option>
+                                    <option value="doble">Doble</option>
+                                    <option value="familiar">Familiar</option>
+                                    <option value="suite">Suite</option>
+                                </select>
+                                <div *ngIf="habitacionForm.get('tipo')?.invalid && habitacionForm.get('tipo')?.touched"
+                                    class="text-danger small mt-1">
+                                    <span *ngIf="habitacionForm.get('tipo')?.errors?.['required']">
+                                        El tipo de habitación es requerido
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Precio Habitación</label>
+                                <input type="number" class="form-control" formControlName="precio" min="1" placeholder="Precio habitación">
+                                <div *ngIf="habitacionForm.get('precio')?.invalid && habitacionForm.get('precio')?.touched"
+                                    class="text-danger small mt-1">
+                                    <span *ngIf="habitacionForm.get('precio')?.errors?.['required']">
+                                        El precio de la habitación es requerido
+                                    </span>
+                                    <span *ngIf="habitacionForm.get('precio')?.errors?.['min']">
+                                        El precio de la habitación debe ser mayor a 0                                   
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Capacidad Habitación</label>
+                                <input type="number" class="form-control" formControlName="capacidad" min="1" placeholder="Capacidad habitación">
+                                <div *ngIf="habitacionForm.get('capacidad')?.invalid && habitacionForm.get('capacidad')?.touched"
+                                    class="text-danger small mt-1">
+                                    <span *ngIf="habitacionForm.get('capacidad')?.errors?.['required']">
+                                        La capacidad de habitación es requerido
+                                    </span>
+                                    <span *ngIf="habitacionForm.get('capacidad')?.errors?.['max']">
+                                        La capacidad máxima es 10
+                                    </span>
+                                    <span *ngIf="habitacionForm.get('capacidad')?.errors?.['min']">
+                                        La capacidad mínima debe ser mayor a 0                                   
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-success" [disabled]="habitacionForm.invalid">
+                                Guardar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
