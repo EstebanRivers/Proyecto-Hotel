@@ -9,10 +9,12 @@ import com.proyecto.commons.configuration.FeignClientConfig;
 @FeignClient(name = "reservas", configuration = FeignClientConfig.class)
 public interface ReservaClient {
 	
-	@GetMapping("/habitacion/{idHabitacion}/tiene-reserva")
-    boolean habitacionTieneReserva(@PathVariable Long idHabitacion);
+	@GetMapping("/habitacion/{idHabitacion}/tiene-reservas")
+    boolean habitacionTieneReservas(@PathVariable Long idHabitacion);
 	
-	@GetMapping("/huesped/{idHuesped}/tiene-reserva")
-	boolean huespedTieneReserva(@PathVariable Long idHuesped);
+	
+	
+	@GetMapping("/huesped/{idHuesped}/tiene-reservas")
+	boolean huespedTieneReservas(@PathVariable Long idHuesped);
 
 }

@@ -204,16 +204,14 @@ public class ReservaServiceImpl implements ReservaService{
 	
 	private void validarCamposEditablesPorEstado(Reserva reserva, ReservaRequest request) {
 	    if (reserva.getEstadoReserva() == EstadoReserva.CONFIRMADA) {
-	        // En CONFIRMADA, no pueden cambiar ni el huésped ni la habitación
 	        if (!reserva.getIdHuesped().equals(request.idHuesped()) ||
 	            !reserva.getIdHabitacion().equals(request.idHabitacion())) {
 	            throw new ReglaNegocioException("Para una reserva CONFIRMADA, solo está permitido modificar las fechas de entrada y salida.");
 	        }
 	    } else if (reserva.getEstadoReserva() == EstadoReserva.EN_CURSO) {
-	        // En EN_CURSO, no pueden cambiar huésped, habitación, ni la fecha de entrada
 	        if (!reserva.getIdHuesped().equals(request.idHuesped()) ||
 	            !reserva.getIdHabitacion().equals(request.idHabitacion()) ||
-	            !reserva.getFechaEntrada().isEqual(request.fechaEntrada())) { // Se usa isEqual() para evitar falsos positivos con nanosegundos
+	            !reserva.getFechaEntrada().isEqual(request.fechaEntrada())) { 
 	            throw new ReglaNegocioException("Para una reserva EN_CURSO, solo está permitido modificar la fecha de salida.");
 	        }
 	    }

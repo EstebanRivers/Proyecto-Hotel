@@ -70,7 +70,7 @@ public class HabitacionServiceImpl implements HabitacionService{
 	public void eliminar(Long id) {
 		Habitacion habitacion = obtenerHabitacionOException(id);
 		
-		if (reservaClient.habitacionTieneReserva(id)) {
+		if (reservaClient.habitacionTieneReservas(id)) {
 	        throw new EntidadRelacionadaException("No se puede eliminar la habitacion: la habitacion esta OCUPADA.");
 	    }
 		
@@ -100,7 +100,7 @@ public class HabitacionServiceImpl implements HabitacionService{
 		Habitacion habitacion = obtenerHabitacionOException(idHabitacion);
         
 		if (idEstadoHabitacion == 2L) { 
-            if (reservaClient.habitacionTieneReserva(idHabitacion)) {
+            if (reservaClient.habitacionTieneReservas(idHabitacion)) {
                 throw new EntidadRelacionadaException("No es posible cambiar la disponibilidad: la habitacion esta OCUPADA.");
             }
         }

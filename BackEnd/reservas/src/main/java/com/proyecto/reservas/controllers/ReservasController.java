@@ -41,12 +41,12 @@ public class ReservasController extends CommonController<ReservaRequest, Reserva
 	    return ResponseEntity.ok(response);
 	}
 	
-	@GetMapping("/habitaciones/{idHabitacion}/tiene-reservas")
+	@GetMapping("/habitacion/{idHabitacion}/tiene-reservas")
 	public ResponseEntity<Boolean> habitacionTieneReservasActivas(@PathVariable @Positive Long idHabidacion) {
 	    return ResponseEntity.ok(service.habitacionTieneReservas(idHabidacion));
 	}
 
-	@GetMapping("/huespedes/{idHuesped}/tiene-reservas")
+	@GetMapping("/huesped/{idHuesped}/tiene-reservas")
 	public ResponseEntity<Boolean> huespedTieneReservasActivas(@PathVariable @Positive Long idHuesped) {
 	    return ResponseEntity.ok(service.huespedTieneReservas(idHuesped));
 	}

@@ -82,7 +82,7 @@ public class HuespedServiceImpl implements HuespedService {
 		Huesped huesped = obtenerHuespedOException(id);
 		log.info("Eliminando Huesped con id: {}", id);
 		
-		if (reservaClient.huespedTieneReserva(id)) {
+		if (reservaClient.huespedTieneReservas(id)) {
 	        throw new EntidadRelacionadaException("No se puede eliminar al huesped ya que tiene reservaciones agendadas");
 	    }
 		
