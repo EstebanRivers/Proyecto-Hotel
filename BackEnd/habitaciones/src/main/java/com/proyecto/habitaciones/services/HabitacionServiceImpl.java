@@ -9,7 +9,7 @@ import com.proyecto.commons.dto.HabitacionRequest;
 import com.proyecto.commons.dto.HabitacionResponse;
 import com.proyecto.commons.enums.EstadoHabitacion;
 import com.proyecto.commons.enums.EstadoRegistro;
-import com.proyecto.commons.exceptions.RecursoNoEncontrado;
+import com.proyecto.commons.exceptions.RecursoNoEncontradoException;
 import com.proyecto.habitaciones.entities.Habitacion;
 import com.proyecto.habitaciones.mappers.HabitacionMapper;
 import com.proyecto.habitaciones.repositories.HabitacionRepository;
@@ -75,7 +75,7 @@ public class HabitacionServiceImpl implements HabitacionService{
 	@Override
 	public HabitacionResponse obtenerHabitacionPorIdSinEstado(Long id) {
 		return habitacionMapper.entityToResponse(habitacionRepository.findById(id).orElseThrow(() -> 
-		new RecursoNoEncontrado("Medico sin estado no encontrado con el id: " + id)));
+		new RecursoNoEncontradoException("Medico sin estado no encontrado con el id: " + id)));
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class HabitacionServiceImpl implements HabitacionService{
 		log.info("Buscando Habitacion Activa con el id: {}", id);
 		
 		return habitacionRepository.findByIdAndEstadoRegistro(id, EstadoRegistro.ACTIVO).orElseThrow(() -> 
-		new RecursoNoEncontrado("Habitacion activa no encontrada con el id: " + id));
+		new RecursoNoEncontradoException("Habitacion activa no encontrada con el id: " + id));
 	}
 	
 	private void validarNumeroUnico(Integer numero) {
