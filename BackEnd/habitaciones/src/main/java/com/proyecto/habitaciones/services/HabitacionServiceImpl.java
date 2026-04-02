@@ -5,10 +5,12 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.proyecto.commons.clients.ReservaClient;
 import com.proyecto.commons.dto.HabitacionRequest;
 import com.proyecto.commons.dto.HabitacionResponse;
 import com.proyecto.commons.enums.EstadoHabitacion;
 import com.proyecto.commons.enums.EstadoRegistro;
+import com.proyecto.commons.exceptions.EntidadRelacionadaException;
 import com.proyecto.commons.exceptions.RecursoNoEncontradoException;
 import com.proyecto.habitaciones.entities.Habitacion;
 import com.proyecto.habitaciones.mappers.HabitacionMapper;
@@ -25,6 +27,7 @@ public class HabitacionServiceImpl implements HabitacionService{
 	
 	private final HabitacionRepository habitacionRepository;
 	private final HabitacionMapper habitacionMapper;
+	private final ReservaClient reservaClient;
 
 	@Override
 	public List<HabitacionResponse> listar() {
@@ -67,6 +70,9 @@ public class HabitacionServiceImpl implements HabitacionService{
 	public void eliminar(Long id) {
 		Habitacion habitacion = obtenerHabitacionOException(id);
 		
+		if (reservaClient.habitacionTieneReserva(id)) {
+	        throw new EntidadRelacionadaException("No se puede eliminar la habitacion: la habitacion esta OCUPADA.");
+	    }
 		
 		habitacion.setEstadoRegistro(EstadoRegistro.ELIMINADO);
 		
@@ -75,7 +81,7 @@ public class HabitacionServiceImpl implements HabitacionService{
 	@Override
 	public HabitacionResponse obtenerHabitacionPorIdSinEstado(Long id) {
 		return habitacionMapper.entityToResponse(habitacionRepository.findById(id).orElseThrow(() -> 
-		new RecursoNoEncontradoException("Medico sin estado no encontrado con el id: " + id)));
+		new RecursoNoEncontradoException("Habitacion sin estado no encontrado con el id: " + id)));
 	}
 
 	@Override
@@ -93,6 +99,12 @@ public class HabitacionServiceImpl implements HabitacionService{
 	public HabitacionResponse cambiarEstadoHabitacionManual(Long idHabitacion, Long idEstadoHabitacion) {
 		Habitacion habitacion = obtenerHabitacionOException(idHabitacion);
         
+		if (idEstadoHabitacion == 2L) { 
+            if (reservaClient.habitacionTieneReserva(idHabitacion)) {
+                throw new EntidadRelacionadaException("No es posible cambiar la disponibilidad: la habitacion esta OCUPADA.");
+            }
+        }
+		
         habitacion.setEstadoHabitacion(EstadoHabitacion.fromCodigo(idEstadoHabitacion));
         return habitacionMapper.entityToResponse(habitacionRepository.save(habitacion));
 	}
@@ -106,13 +118,13 @@ public class HabitacionServiceImpl implements HabitacionService{
 	
 	private void validarNumeroUnico(Integer numero) {
         if (habitacionRepository.existsByNumeroAndEstadoRegistro(numero, EstadoRegistro.ACTIVO)) {
-            throw new IllegalArgumentException("El email ya existe en el sistema: " + numero);
+            throw new IllegalArgumentException("Ya existe una habitacion en el sistema con el numero: " + numero);
         }
     }
 	
 	private void validarCambiosUnicos(HabitacionRequest request, Long id) {
 		if (habitacionRepository.existsByNumeroAndIdNotAndEstadoRegistro(request.numero(), id, EstadoRegistro.ACTIVO)) {
-            throw new IllegalArgumentException("El email ya existe en el sistema: " + request.numero());
+            throw new IllegalArgumentException("Ya existe una habitacion en el sistema con el numero: " + request.numero());
         }
 	}
 

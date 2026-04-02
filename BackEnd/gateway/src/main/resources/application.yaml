@@ -6,6 +6,7 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: http://localhost:9000/oauth2/jwks
+
   cloud:
     loadbalancer:
       enabled: true
@@ -31,15 +32,11 @@ spring:
                 - Path=/api/reservas/**
               filters:
                 - StripPrefix=2
-            - id: usuarios
-              uri: lb://usuarios
-              predicates:
-                - Path=/api/usuarios/**
-              filters:
-                - StripPrefix=2
+
 server:
   port: 8090
+
 eureka:
   client:
     service-url:
-      defaultZone: 'http://localhost:8761/eureka'
+      defaultZone: http://localhost:8761/eureka

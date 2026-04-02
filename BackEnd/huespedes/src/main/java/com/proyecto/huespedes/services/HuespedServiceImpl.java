@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.proyecto.commons.clients.ReservaClient;
 import com.proyecto.commons.dto.HuespedRequest;
 import com.proyecto.commons.dto.HuespedResponse;
 import com.proyecto.commons.enums.EstadoRegistro;
+import com.proyecto.commons.exceptions.EntidadRelacionadaException;
 import com.proyecto.commons.exceptions.RecursoNoEncontradoException;
 import com.proyecto.commons.exceptions.ReglaNegocioException;
 import com.proyecto.huespedes.entities.Huesped;
@@ -24,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class HuespedServiceImpl implements HuespedService {
 	private final HuespedRepository huespedRepository;
 	private final HuespedMapper huespedMapper;
+	private final ReservaClient reservaClient;
 	
 	@Override
 	@Transactional(readOnly = true)
@@ -79,7 +82,9 @@ public class HuespedServiceImpl implements HuespedService {
 		Huesped huesped = obtenerHuespedOException(id);
 		log.info("Eliminando Huesped con id: {}", id);
 		
-		// Validacion para eliminar si tiene reservas En_CURSO
+		if (reservaClient.huespedTieneReserva(id)) {
+	        throw new EntidadRelacionadaException("No se puede eliminar al huesped ya que tiene reservaciones agendadas");
+	    }
 		
 		huesped.setEstadoRegistro(EstadoRegistro.ELIMINADO);
 		log.info("Huesped con id {} ha sido marcado como eliminado", id);;

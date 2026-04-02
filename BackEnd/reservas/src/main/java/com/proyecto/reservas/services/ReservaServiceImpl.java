@@ -1,5 +1,6 @@
 package com.proyecto.reservas.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import com.proyecto.commons.dto.HuespedResponse;
 import com.proyecto.commons.enums.EstadoHabitacion;
 import com.proyecto.commons.enums.EstadoRegistro;
 import com.proyecto.commons.exceptions.RecursoNoEncontradoException;
+import com.proyecto.commons.exceptions.ReglaNegocioException;
 import com.proyecto.reservas.dto.ReservaRequest;
 import com.proyecto.reservas.dto.ReservaResponse;
 import com.proyecto.reservas.entities.Reserva;
@@ -64,6 +66,9 @@ public class ReservaServiceImpl implements ReservaService{
 		
 		HabitacionResponse habitacion = obtenerHabitacionResponse(request.idHabitacion());
 		validarDisponibilidadHabitacion(habitacion);
+		validarHabitacionSinReservasActivas(request.idHabitacion());
+		
+		validarFechas(request.fechaEntrada(), request.fechaSalida());
 		
 		Reserva reserva = reservaRepository.save(reservaMapper.requestToEntity(request));
 		
@@ -76,11 +81,12 @@ public class ReservaServiceImpl implements ReservaService{
 	public ReservaResponse actualizar(ReservaRequest request, Long id) {
 		Reserva reserva = obtenerReservaOException(id);
 		validarEstadoReservaAlActualizar(reserva);
+		validarCamposEditablesPorEstado(reserva, request);
 		
 		HuespedResponse huesped = obtenerHuespedResponse(request.idHuesped());
 		
 		HabitacionResponse habitacion = obtenerHabitacionResponse(request.idHabitacion());
-		validarDisponibilidadHabitacion(habitacion);
+		validarDisponibilidadHabitacionActualizado(habitacion, request.idHabitacion(), reserva);
 		
 		actualizarDisponibilidadSiCambioDeHabitacion(reserva, request.idHabitacion());
 		
@@ -133,7 +139,7 @@ public class ReservaServiceImpl implements ReservaService{
 	@Override
 	@Transactional(readOnly = true)
 	public boolean huespedTieneReservas(Long idHuesped) {
-		List<EstadoReserva> estadosActivos = List.of(EstadoReserva.EN_CURSO, EstadoReserva.CONFIRMADA);
+		List<EstadoReserva> estadosActivos = List.of(EstadoReserva.EN_CURSO);
 		
 		return reservaRepository.existsByIdHuespedAndEstadoReservaInAndEstadoRegistro(idHuesped, estadosActivos, EstadoRegistro.ACTIVO);
 	
@@ -171,7 +177,7 @@ public class ReservaServiceImpl implements ReservaService{
 	
 	private void validarReservaUnicaHuesped(Long idHuesped, List<EstadoReserva> estados, EstadoRegistro estadoRegistro) {
 		if(reservaRepository.existsByIdHuespedAndEstadoReservaInAndEstadoRegistro(idHuesped, estados, estadoRegistro)) {
-			throw new IllegalStateException("El Huesped no puede tener más de una cita activa");
+			throw new IllegalStateException("El Huesped no puede tener más de una reserva activa");
 		}
 	}
 	
@@ -181,10 +187,49 @@ public class ReservaServiceImpl implements ReservaService{
 	    }
 	}
 	
+	private void validarDisponibilidadHabitacionActualizado(HabitacionResponse habitacion, Long idHabitacion, Reserva reserva) {
+		if (!reserva.getIdHabitacion().equals(idHabitacion)) {
+		    validarDisponibilidadHabitacion(habitacion);
+		    validarHabitacionSinReservasActivas(idHabitacion);
+		}
+	}
+	
+	private void validarHabitacionSinReservasActivas(Long idHabitacion) {
+	    List<EstadoReserva> estadosActivos = List.of(EstadoReserva.EN_CURSO, EstadoReserva.CONFIRMADA);
+	    
+	    if(reservaRepository.existsByIdHabitacionAndEstadoReservaInAndEstadoRegistro(idHabitacion, estadosActivos, EstadoRegistro.ACTIVO)) {
+	        throw new IllegalStateException("La habitacion seleccionada ya tiene una reservacion activa en el sistema. Error en la disponibilidad");
+	    }
+	}
+	
+	private void validarCamposEditablesPorEstado(Reserva reserva, ReservaRequest request) {
+	    if (reserva.getEstadoReserva() == EstadoReserva.CONFIRMADA) {
+	        // En CONFIRMADA, no pueden cambiar ni el huésped ni la habitación
+	        if (!reserva.getIdHuesped().equals(request.idHuesped()) ||
+	            !reserva.getIdHabitacion().equals(request.idHabitacion())) {
+	            throw new ReglaNegocioException("Para una reserva CONFIRMADA, solo está permitido modificar las fechas de entrada y salida.");
+	        }
+	    } else if (reserva.getEstadoReserva() == EstadoReserva.EN_CURSO) {
+	        // En EN_CURSO, no pueden cambiar huésped, habitación, ni la fecha de entrada
+	        if (!reserva.getIdHuesped().equals(request.idHuesped()) ||
+	            !reserva.getIdHabitacion().equals(request.idHabitacion()) ||
+	            !reserva.getFechaEntrada().isEqual(request.fechaEntrada())) { // Se usa isEqual() para evitar falsos positivos con nanosegundos
+	            throw new ReglaNegocioException("Para una reserva EN_CURSO, solo está permitido modificar la fecha de salida.");
+	        }
+	    }
+	}
+	
 	private HabitacionClient cambiarDisponibilidadHabitacion (Long idHabitacion, EstadoHabitacion disponibilidad) {
 		habitacionClient.cambiarEstadoHabitacion(idHabitacion, disponibilidad.getCodigo());
 		return habitacionClient;
 	}
+	
+	private void validarFechas(LocalDateTime fechaEntrada, LocalDateTime fechaSalida) {
+
+        if (!fechaEntrada.isBefore(fechaSalida)) {
+            throw new IllegalArgumentException("La fecha de entrada debe ser posterior a la fecha de salida");
+        }
+    }
 	
 	private void validarEstadoReservaAlActualizar(Reserva reserva) {
 	    if (reserva.getEstadoReserva() == EstadoReserva.FINALIZADA && reserva.getEstadoReserva() == EstadoReserva.CANCELADA) {

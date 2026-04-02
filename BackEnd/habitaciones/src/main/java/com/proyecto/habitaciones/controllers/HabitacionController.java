@@ -24,7 +24,7 @@ public class HabitacionController extends CommonController<HabitacionRequest, Ha
 	}
 	
 	@GetMapping("/id-habitacion/{id}")
-	public ResponseEntity<HabitacionResponse> obtenerMedicoPorIdSinEstado(@PathVariable @Positive(message= "El ID debe ser positivo w") Long id){
+	public ResponseEntity<HabitacionResponse> obtenerHabitacionPorIdSinEstado(@PathVariable @Positive(message= "El ID debe ser positivo w") Long id){
 		return ResponseEntity.ok(service.obtenerHabitacionPorIdSinEstado(id));
 	}
 	
