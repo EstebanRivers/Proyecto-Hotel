@@ -1,16 +1,17 @@
 package com.proyecto.auth.services;
 
-/*import java.time.Instant;
+import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.proyecto.auth.dto.LoginRequest;
 import com.proyecto.auth.dto.TokenResponse;
+import com.proyecto.commons.exceptions.CredencialesInvalidasException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSSigner;
@@ -27,15 +28,17 @@ import com.nimbusds.jwt.SignedJWT;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j*/
+@Slf4j
 public class AuthServiceImpl implements AuthService {
 
-    /*private final UserDetailsService userDetailsService;
-
+    private final UserDetailsService userDetailsService;
+    private final PasswordEncoder passwordEncoder;
     private final RSAKey rsaKey;
 
-    public AuthServiceImpl(UserDetailsService userDetailsService, JWKSource<SecurityContext> jwkSource) {
+    public AuthServiceImpl(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, JWKSource<SecurityContext> jwkSource) {
         this.userDetailsService = userDetailsService;
+        this.passwordEncoder = passwordEncoder;
+        
         try {
             JWKSelector jwkSelector = new JWKSelector(
                     new JWKMatcher.Builder().keyType(KeyType.RSA).build()
@@ -54,9 +57,8 @@ public class AuthServiceImpl implements AuthService {
         log.info("Cargando usuario {}", request.username());
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.username());
 
-        if (userDetails == null || !new BCryptPasswordEncoder().matches(
-                request.password(), userDetails.getPassword()) ) {
-            throw new IllegalArgumentException("Credenciales inválidas");
+        if (userDetails == null || !passwordEncoder.matches(request.password(), userDetails.getPassword()) ) {
+            throw new CredencialesInvalidasException("Credenciales inválidas");
         }
 
         Instant now = Instant.now();
@@ -80,5 +82,5 @@ public class AuthServiceImpl implements AuthService {
         signedJWT.sign(signer);
 
         return new TokenResponse(signedJWT.serialize());
-    }*/
+    }
 }

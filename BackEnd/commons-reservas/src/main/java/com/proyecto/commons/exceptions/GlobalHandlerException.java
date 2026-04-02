@@ -97,6 +97,12 @@ public class GlobalHandlerException {
                 .body(new ErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage()));
     }
     
+    @ExceptionHandler(CredencialesInvalidasException.class)
+    public ResponseEntity<ErrorResponse> handleCredencialesInvalidasException(CredencialesInvalidasException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        		.body(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), e.getMessage()));
+    }
+    
     @ExceptionHandler(FeignException.class)
     public ResponseEntity<ErrorResponse> handleGenericFeignException(FeignException e) {
         log.error("Error en la comunicación Feign: " + e.getMessage());

@@ -1,29 +1,34 @@
 package com.proyecto.usuarios.entities;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
-import java.util.Set;
+import com.proyecto.commons.enums.EstadoRegistro;
+import com.proyecto.commons.enums.Rol;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
-@Table(name = "USUARIOS_OAUTH")
+@Table(name = "USUARIOS")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Getter
 @Setter
+@ToString
 public class Usuario {
 	
 	@Id
@@ -31,18 +36,19 @@ public class Usuario {
     @Column(name = "ID_USUARIO")
     private Long id;
 
-    @Column(name = "USERNAME", nullable = false, length = 20, unique = true)
+    @Column(name = "USERNAME", nullable = false, length = 20)
     private String username;
 
     @Column(name = "PASSWORD", nullable = false)
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "USUARIOS_ROLES",
-            joinColumns = @JoinColumn(name = "ID_USUARIO"),
-            inverseJoinColumns = @JoinColumn(name = "ID_ROL")
-    )
-    private Set<Rol> roles;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ROL", nullable = false, length = 10)
+    private Rol rol;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ESTADO_REGISTRO", nullable = false)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    private EstadoRegistro estadoRegistro;
+    
 }

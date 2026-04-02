@@ -1,35 +1,41 @@
 package com.proyecto.usuarios.mappers;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Component;
 
-import com.proyecto.usuarios.dto.UsuarioRequest;
-import com.proyecto.usuarios.dto.UsuarioResponse;
-import com.proyecto.usuarios.entities.Rol;
+import com.proyecto.commons.dto.UsuarioRequest;
+import com.proyecto.commons.dto.UsuarioResponse;
+import com.proyecto.commons.enums.EstadoRegistro;
+import com.proyecto.commons.mappers.CommonMapper;
 import com.proyecto.usuarios.entities.Usuario;
 
 @Component
-public class UsuarioMapper {
+public class UsuarioMapper implements CommonMapper<UsuarioRequest, UsuarioResponse, Usuario>{
 
-    public UsuarioResponse entityToResponse(Usuario usuario) {
-        if (usuario == null) return null;
-        return new UsuarioResponse(
-                usuario.getUsername(),
-                usuario.getRoles().stream()
-                        .map(Rol::getNombre)
-                        .collect(Collectors.toSet())
-        );
-    }
+	@Override
+	public Usuario requestToEntity(UsuarioRequest request) {
+		if (request == null) return null;
+		return Usuario.builder()
+				.username(request.username())
+				.rol(request.rol())
+				.estadoRegistro(EstadoRegistro.ACTIVO)
+				.build();
+	}
 
-    public Usuario requestToEntity(UsuarioRequest request, String password, Set<Rol> roles) {
-        if (request == null) return null;
-        Usuario usuario = new Usuario();
-        usuario.setUsername(request.username());
-        usuario.setPassword(password);
-        usuario.setRoles(roles);
-        return usuario;
-    }
+	@Override
+	public UsuarioResponse entityToResponse(Usuario entity) {
+		return new UsuarioResponse(
+				entity.getId(),
+				entity.getUsername(),
+				entity.getRol(),
+				entity.getEstadoRegistro());
+	}
+
+	@Override
+	public Usuario updateEntityFromRequest(UsuarioRequest request, Usuario entity) {
+		if (entity == null || request == null) return null;
+		
+		entity.setUsername(request.username());
+		return entity;
+	}
 }
 
