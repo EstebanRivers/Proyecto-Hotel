@@ -119,9 +119,9 @@
                             <div class="col-md-12 mb-3">
                                 <label for="estadoReserva" class="form-label">Estado de la Reserva</label>
                                 <select id="estadoReserva" class="form-select" formControlName="estadoReserva">
-                                    <option  value="2">Check-in</option>
-                                    <option  value="3">Check-out</option>
-                                    <option  value="4">Cancelada</option>
+                                    <option *ngIf="opcionIn" value="2">Check-in</option>
+                                    <option *ngIf="opcionOut" value="3">Check-out</option>
+                                    <option *ngIf="opcionCan" value="4">Cancelada</option>
                                 </select>
                                 <div *ngIf="reservaForm.get('estadoReserva')?.invalid && reservaForm.get('estadoReserva')?.touched"
                                     class="text-danger small mt-1">

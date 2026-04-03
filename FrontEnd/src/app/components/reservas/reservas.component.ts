@@ -87,7 +87,27 @@ export class ReservasComponent implements OnInit, AfterViewInit {
 
     this.reservaForm.get('idHuesped')?.clearValidators();
     this.reservaForm.get('idHabitacion')?.clearValidators();
-    
+
+    switch (reserva.estadoReserva) {
+      case 'Reserva creada':
+        this.opcionIn = true;
+        this.opcionOut = false;
+        this.opcionCan = true;
+        break;
+
+      case 'Check-in realizado':
+        this.opcionIn = false;
+        this.opcionOut = true;
+        this.opcionCan = false;
+        break;
+
+      default:
+        this.opcionIn = false;
+        this.opcionOut = false;
+        this.opcionCan = false;
+        break;
+    }
+
     this.reservaForm.patchValue({
       ...reserva,
       fechaEntrada: this.formatoSalida(reserva.fechaEntrada),
