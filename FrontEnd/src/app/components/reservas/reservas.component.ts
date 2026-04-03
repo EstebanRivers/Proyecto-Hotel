@@ -44,7 +44,7 @@ export class ReservasComponent implements OnInit, AfterViewInit {
       idHabitacion: [null, [Validators.required, Validators.min(1), Validators.pattern(/^[0-9]+$/)]],
       fechaEntrada: ['', [Validators.required]],
       fechaSalida: ['', [Validators.required]],
-      idEstadoReserva: ['']
+      idEstadoReserva: [1]
     })
   }
 
@@ -116,11 +116,11 @@ export class ReservasComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.reservaForm.patchValue({
         ...reserva,
-        idEstadoReserva: this.mapearEstado(reserva.estadoReserva),
         idHabitacion: reserva.habitacion.id,
         idHuesped: reserva.huesped.id,
         fechaEntrada: this.formatoSalida(reserva.fechaEntrada),
-        fechaSalida: this.formatoSalida(reserva.fechaSalida)
+        fechaSalida: this.formatoSalida(reserva.fechaSalida),
+        idEstadoReserva: this.mapearEstado(reserva.estadoReserva)
       });
       this.modalInstance.show();
     }, 0);
@@ -178,8 +178,9 @@ export class ReservasComponent implements OnInit, AfterViewInit {
   }
 
   private mapearEstado(estado: string): string {
-    if (estado === 'Reserva creada' || estado === 'Check-in realizado') return '2';
-    if (estado === 'Check-out realizado') return '3';
+    if (estado === 'Reserva creada') return '2';
+    if (estado === 'Check-in realizado') return '3';
+    if (estado === 'Check-out realizado') return '4';
     if (estado === 'Reserva cancelada') return '4';
     return '1';
   }

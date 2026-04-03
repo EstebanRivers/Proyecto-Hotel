@@ -121,10 +121,10 @@
                             <div class="col-md-12 mb-3">
                                 <label for="idEstadoReserva" class="form-label">Estado de la Reserva</label>
                                 <select id="idEstadoReserva" class="form-select" formControlName="idEstadoReserva">
-                                    <option *ngIf="opcionIn" value="1">Confirmar reserva</option>
-                                    <option *ngIf="opcionIn" value="2">Check-in</option>
-                                    <option *ngIf="opcionOut" value="3">Check-out</option>
-                                    <option *ngIf="showActions && opcionCancel" value="4">Cancelar reserva</option>
+                                    <option *ngIf="opcionIn" [value]="1">Confirmar reserva</option>
+                                    <option *ngIf="opcionIn" [value]="2">Check-in</option>
+                                    <option *ngIf="opcionOut" [value]="3">Check-out</option>
+                                    <option *ngIf="showActions && opcionCancel" [value]="4">Cancelar reserva</option>
                                 </select>
                             </div>
                         </div>
