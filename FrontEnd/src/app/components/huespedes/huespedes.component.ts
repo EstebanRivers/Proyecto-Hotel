@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import { HuespedRequest, HuespedResponse } from '../../models/Huesped.model';
 import { HuespedesService } from '../../services/huesped.service';
 import { AuthService } from '../../services/auth.service';
+import { Roles } from '../../constants/Roles';
 declare var bootstrap: any;
 
 @Component({
@@ -46,10 +47,9 @@ export class HuespedesComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.listarHuespedes();
-    /*
     if(this.authService.hasRole(Roles.ADMIN)){
       this.showActions = true;
-    } */
+    }
   }
 
   ngAfterViewInit(): void {

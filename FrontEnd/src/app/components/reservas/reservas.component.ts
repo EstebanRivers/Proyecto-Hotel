@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReservasService } from '../../services/reserva.service';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
+import { Roles } from '../../constants/Roles';
 declare var bootstrap: any;
 
 @Component({
@@ -48,10 +49,9 @@ export class ReservasComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.listarReservas();
-    /*
     if(this.authService.hasRole(Roles.ADMIN)){
       this.showActions = true;
-    } */
+    }
   }
 
   ngAfterViewInit(): void {

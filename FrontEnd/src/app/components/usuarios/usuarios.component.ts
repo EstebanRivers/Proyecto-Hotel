@@ -41,10 +41,10 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    /* this.listarUsuarios();
+    this.listarUsuarios();
     if(this.authService.hasRole(Roles.ADMIN)){
       this.showActions = true;
-    } */
+    } 
   }
 
   ngAfterViewInit(): void {

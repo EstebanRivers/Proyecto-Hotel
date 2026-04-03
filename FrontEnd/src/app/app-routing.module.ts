@@ -5,13 +5,18 @@ import { HuespedesComponent } from './components/huespedes/huespedes.component';
 import { ReservasComponent } from './components/reservas/reservas.component';
 import { HabitacionesComponent } from './components/habitaciones/habitaciones.component';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
+import { LoginComponent } from './components/login/login.component';
+import { AuthGuard } from './guards/auth.guard';
+import { Roles } from './constants/Roles';
 
 const routes: Routes = [
-  {path : 'dashboard', component: DashboardComponent, children:[  
-    {path: 'huespedes', component: HuespedesComponent},
-    {path: 'habitaciones', component: HabitacionesComponent},
-    {path: 'reservas', component: ReservasComponent},
-    {path: 'usuarios', component: UsuariosComponent}
+  {path: '', redirectTo: 'login', pathMatch: 'full' },
+  {path: 'login', component: LoginComponent},
+  {path : 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], children:[  
+    {path: 'huespedes', component: HuespedesComponent, canActivate: [AuthGuard]},
+    {path: 'habitaciones', component: HabitacionesComponent, canActivate: [AuthGuard]},
+    {path: 'reservas', component: ReservasComponent, canActivate: [AuthGuard]},
+    {path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard], data: { roles: [Roles.ADMIN]}}
   ]},
   {path: '**', redirectTo: 'dashboard'}
 ];
