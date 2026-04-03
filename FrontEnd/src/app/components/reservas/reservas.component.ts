@@ -19,7 +19,8 @@ export class ReservasComponent implements OnInit, AfterViewInit {
 
   opcionIn: boolean = false;
   opcionOut: boolean = false;
-  opcionCan: boolean = false;
+  opcionCancel: boolean = false;
+  botonEditar: boolean = false;
 
   isEditMode: boolean = false;
   selectedReserva: ReservaResponse | null = null;
@@ -41,7 +42,7 @@ export class ReservasComponent implements OnInit, AfterViewInit {
       idHabitacion: [null, [Validators.required, Validators.min(1), Validators.pattern(/^[0-9]+$/)]],
       fechaEntrada: ['', [Validators.required]],
       fechaSalida: ['', [Validators.required]],
-      estadoReserva: ['']
+      idEstadoReserva: ['']
     })
   }
 
@@ -92,33 +93,42 @@ export class ReservasComponent implements OnInit, AfterViewInit {
       case 'Reserva creada':
         this.opcionIn = true;
         this.opcionOut = false;
-        this.opcionCan = true;
+        this.opcionCancel = true;
         break;
-
       case 'Check-in realizado':
         this.opcionIn = false;
         this.opcionOut = true;
-        this.opcionCan = false;
+        this.opcionCancel = false;
         break;
-
+      case 'Check-out realizado':
+        this.opcionIn = false;
+        this.opcionOut = false;
+        this.opcionCancel = false;
+        break;
       default:
         this.opcionIn = false;
         this.opcionOut = false;
-        this.opcionCan = false;
+        this.opcionCancel = false;
         break;
     }
 
-    this.reservaForm.patchValue({
-      ...reserva,
-      fechaEntrada: this.formatoSalida(reserva.fechaEntrada),
-      fechaSalida: this.formatoSalida(reserva.fechaSalida)
-    });
-    this.modalInstance.show();
+    setTimeout(() => {
+      this.reservaForm.patchValue({
+        ...reserva,
+        idEstadoReserva: this.mapearEstado(reserva.estadoReserva),
+        idHabitacion: reserva.habitacion.id,
+        idHuesped: reserva.huesped.id,
+        fechaEntrada: this.formatoSalida(reserva.fechaEntrada),
+        fechaSalida: this.formatoSalida(reserva.fechaSalida)
+      });
+      this.modalInstance.show();
+    }, 0);
   }
 
   onSubmit(): void {
     if (this.reservaForm.invalid) return;
     const formValue = this.reservaForm.value;
+
     const reservaData: ReservaRequest = {
       ...formValue,
       fechaEntrada: this.formatoEntrada(formValue.fechaEntrada),
@@ -164,6 +174,13 @@ export class ReservasComponent implements OnInit, AfterViewInit {
         });
       }
     });
+  }
+
+  private mapearEstado(estado: string): string {
+    if (estado === 'Reserva creada' || estado === 'Check-in realizado') return '2';
+    if (estado === 'Check-out realizado') return '3';
+    if (estado === 'Reserva cancelada') return '4';
+    return '1';
   }
 
   private formatoSalida(dateStr: string): string {

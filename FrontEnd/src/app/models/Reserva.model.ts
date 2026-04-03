@@ -1,32 +1,34 @@
 export interface ReservaRequest {
     idHuesped: number,
     idHabitacion: number,
-    fechaEntrada: string, 
+    fechaEntrada: string,
     fechaSalida: string,
-    idEstado: number
+    idEstadoReserva: number
 }
 
 export interface ReservaResponse {
-    id: number,            
-    huesped: DatoHuesped,        
+    id: number,
+    huesped: DatoHuesped,
     habitacion: DatoHabitacion,
-    fechaEntrada: string, 
-    fechaSalida: string, 
+    fechaEntrada: string,
+    fechaSalida: string,
     estadoReserva: string
 }
 
 export interface DatoHuesped {
-    nombre: string,        
+    id: number,
+    nombre: string,
     edad: number,
     email: string,
-    telefono: string, 
+    telefono: string,
     nacionalidad: string,
     documento: string
 }
 
 export interface DatoHabitacion {
-  numero: string,
-  tipo: string,
-  precio: number,
-  capacidad: number
+    id: number,
+    numero: string,
+    tipo: string,
+    precio: number,
+    capacidad: number
 }
