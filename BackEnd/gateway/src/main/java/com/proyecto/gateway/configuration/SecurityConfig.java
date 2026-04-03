@@ -1,6 +1,5 @@
 package com.proyecto.gateway.configuration;
 
-
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
@@ -20,7 +19,7 @@ public class SecurityConfig {
 	SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
 		
 		http
-	        .csrf(csrf -> csrf.disable()) // Se desactiva CSRF para API REST
+	        .csrf(csrf -> csrf.disable())
 	        .cors(cors -> cors.configurationSource(request -> {
 	            CorsConfiguration corsConfiguration = new CorsConfiguration();
 	            corsConfiguration.setAllowedOrigins(List.of("http://localhost:4200"));
@@ -31,16 +30,26 @@ public class SecurityConfig {
 	        }))
 	        .authorizeExchange((authorize) -> authorize
 		            .pathMatchers(HttpMethod.OPTIONS ,"/**").permitAll()
+		            .pathMatchers("/api/login/**").permitAll()
 		            
-		            /*.pathMatchers(HttpMethod.GET ,"/**").hasAnyRole("ADMIN", "USER")
-		            .pathMatchers(HttpMethod.POST ,"/**").hasAnyRole("ADMIN", "USER")
-		            .pathMatchers(HttpMethod.PUT ,"/**").hasAnyRole("ADMIN", "USER")
-		            .pathMatchers(HttpMethod.PATCH ,"/**").hasAnyRole("ADMIN", "USER")
-		            .pathMatchers(HttpMethod.DELETE ,"/**").hasRole("ADMIN")
-		            .anyExchange().authenticated()*/
-	        		.anyExchange().permitAll()
+		            .pathMatchers("/api/usuarios/**").hasRole("ADMIN")
+		            
+		            .pathMatchers(HttpMethod.GET, "/api/habitaciones/**").hasAnyRole("ADMIN", "USER")
+		    		.pathMatchers("/api/habitaciones/**").hasRole("ADMIN")
+		    		
+		    		.pathMatchers(HttpMethod.GET, "/api/huespedes/**").hasAnyRole("ADMIN", "USER")
+		    		.pathMatchers(HttpMethod.POST, "/api/huespedes/**").hasAnyRole("ADMIN", "USER")
+		    		.pathMatchers(HttpMethod.PUT, "/api/huespedes/**").hasAnyRole("ADMIN", "USER")
+		    		.pathMatchers(HttpMethod.DELETE, "/api/huespedes/**").hasRole("ADMIN")
+		    		
+		    		.pathMatchers(HttpMethod.GET, "/api/reservas/**").hasAnyRole("ADMIN", "USER")
+		    		.pathMatchers(HttpMethod.POST, "/api/reservas/**").hasAnyRole("ADMIN", "USER")
+		    		.pathMatchers(HttpMethod.PUT, "/api/reservas/**").hasAnyRole("ADMIN", "USER")
+		    		.pathMatchers(HttpMethod.PATCH, "/api/reservas/**").hasAnyRole("ADMIN", "USER")
+		    		.pathMatchers(HttpMethod.DELETE, "/api/reservas/**").hasRole("ADMIN")
+
+		            .anyExchange().authenticated()
 		        )
-	        // Configura la app como Resource Server que valida JWT
 	        .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt ->
 	            jwt.jwtAuthenticationConverter(reactiveJwtAuthenticationConverterAdapter())));
 	
@@ -51,7 +60,7 @@ public class SecurityConfig {
 	ReactiveJwtAuthenticationConverterAdapter reactiveJwtAuthenticationConverterAdapter() {
 		JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         grantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
-        grantedAuthoritiesConverter.setAuthorityPrefix("");
+        grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
 
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);

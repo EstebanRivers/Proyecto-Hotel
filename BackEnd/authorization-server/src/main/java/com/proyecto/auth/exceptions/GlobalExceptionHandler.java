@@ -16,9 +16,8 @@ import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 @Slf4j
-public class GlobalHandlerException {
-
-    @ExceptionHandler(ConstraintViolationException.class)
+public class GlobalExceptionHandler {
+	@ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException e) {
         log.error("Violación de restricción: {}", e.getMessage());
         return ResponseEntity.badRequest()
@@ -72,5 +71,10 @@ public class GlobalHandlerException {
                 .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                         "Error interno del servidor. Por favor, contacte al administrador." + e.getMessage()));
     }
-
+    
+    @ExceptionHandler(CredencialesInvalidasException.class)
+    public ResponseEntity<ErrorResponse> handleCredencialesInvalidasException(CredencialesInvalidasException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        		.body(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), e.getMessage()));
+    }
 }

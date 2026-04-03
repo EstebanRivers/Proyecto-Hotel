@@ -14,6 +14,11 @@ spring:
       server:
         webflux:
           routes:
+            - id: authorization-server
+              uri: http://localhost:9000
+              predicates:
+                - Path=/api/login/**
+
             - id: habitaciones
               uri: lb://habitaciones
               predicates:
@@ -30,6 +35,12 @@ spring:
               uri: lb://reservas
               predicates:
                 - Path=/api/reservas/**
+              filters:
+                - StripPrefix=2
+            - id: usuarios
+              uri: lb://usuarios
+              predicates:
+                - Path=/api/usuarios/**
               filters:
                 - StripPrefix=2
 
