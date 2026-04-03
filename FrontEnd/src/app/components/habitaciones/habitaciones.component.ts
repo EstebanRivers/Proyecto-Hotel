@@ -4,6 +4,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HabitacionesSerivice } from '../../services/habitacion.service';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
+import { Rol } from '../../constants/Rol';
+import { formatNumber } from '@angular/common';
+
 declare var bootstrap: any;
 
 @Component({
@@ -35,15 +38,16 @@ export class HabitacionesComponent implements OnInit, AfterViewInit {
       numero: [null, [Validators.required, Validators.min(1)]],
       tipo: ['', [Validators.required]],
       precio: [null, [Validators.required, Validators.min(1)]],
-      capacidad: [null, [Validators.required, Validators.min(1), Validators.max(10)]]
+      capacidad: [null, [Validators.required, Validators.min(1), Validators.max(10)]],
+      idEstadoHabitacion: [1]
     })
   }
 
   ngOnInit(): void {
-     this.listarHabitaciones();
-    /* if(this.authService.hasRole(Roles.ADMIN)){
+    this.listarHabitaciones();
+    if (this.authService.hasRole(Rol.ADMIN)) {
       this.showActions = true;
-    } */
+    }
   }
 
   ngAfterViewInit(): void {
@@ -78,14 +82,23 @@ export class HabitacionesComponent implements OnInit, AfterViewInit {
     this.selectedHabitacion = habitacion;
     this.modalText = 'Editando habitación: ' + habitacion.numero;
 
-    this.habitacionForm.patchValue({ ...habitacion });
+    this.habitacionForm.patchValue({
+      ...habitacion,
+      tipo: habitacion.tipo,
+      idEstadoHabitacion: this.mapearEstado(habitacion.estadoHabitacion)
+    });
     this.modalInstance.show();
   }
 
   onSubmit(): void {
     if (this.habitacionForm.invalid) return;
 
-    const habitacionData: HabitacionRequest = this.habitacionForm.value;
+    const formValue = this.habitacionForm.value;
+    
+    const habitacionData: HabitacionRequest = {
+      ...formValue
+    }
+    console.log(habitacionData);
 
     if (this.isEditMode && this.selectedHabitacion) {
       this.habitacionService.putHabitacion(habitacionData, this.selectedHabitacion.id).subscribe({
@@ -128,5 +141,12 @@ export class HabitacionesComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
+  
+   private mapearEstado(estado: string): string {
+    if (estado === 'Lista para asignarse') return '1';
+    if(estado === 'Asignada a una reserva') return '2';
+    if (estado === 'En limpieza') return '3';
+    if (estado === 'En reparación') return '4';
+    return '1';
+  }
 }

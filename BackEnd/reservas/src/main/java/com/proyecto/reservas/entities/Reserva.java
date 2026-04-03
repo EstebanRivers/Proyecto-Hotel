@@ -21,7 +21,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "RESERVACIONES ")
+@Table(name = "RESERVACIONES")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -51,7 +51,7 @@ public class Reserva {
     @Enumerated(EnumType.STRING)
 	private EstadoReserva estadoReserva;
 	
-    @Column(name = "ESTADO_REGISTRO", length = 30, nullable = false)
+    @Column(name = "ESTADO_REGISTRO", nullable = false)
     @Enumerated(EnumType.STRING)
 	private EstadoRegistro estadoRegistro;
 }

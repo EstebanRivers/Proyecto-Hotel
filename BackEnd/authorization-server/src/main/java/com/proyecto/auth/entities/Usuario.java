@@ -3,8 +3,8 @@ package com.proyecto.auth.entities;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import com.proyecto.commons.enums.EstadoRegistro;
-import com.proyecto.commons.enums.Rol;
+import com.proyecto.auth.enums.EstadoRegistro;
+import com.proyecto.auth.enums.Rol;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

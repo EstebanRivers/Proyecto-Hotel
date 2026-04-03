@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.proyecto.auth.dto.LoginRequest;
 import com.proyecto.auth.dto.TokenResponse;
-import com.proyecto.commons.exceptions.CredencialesInvalidasException;
+import com.proyecto.auth.exceptions.CredencialesInvalidasException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSSigner;

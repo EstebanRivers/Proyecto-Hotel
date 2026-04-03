@@ -12,7 +12,7 @@
                     <tr style="text-align: center;">
                         <th scope="col">#</th>
                         <th scope="col">Username</th>
-                        <th scope="col">Roles</th>
+                        <th scope="col">Rol</th>
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
@@ -21,14 +21,22 @@
                         <td>{{ i + 1 }}</td>
                         <td>{{ usuario.username }}</td>
                         <td>
-                            <span *ngFor="let rol of usuario.roles" class="badge bg-primary me-1">
-                                {{ transformarRol(rol) }}
+                            <span class="badge bg-primary me-1">
+                                {{ usuario.rol }}
                             </span>
                         </td>
                         <td>
-                            <button class="btn btn-danger btn-sm" (click)="deleteUsusario(usuario.id)">
-                                <i class="fa fa-trash"></i>
-                            </button>
+                            <div class="d-flex gap-2 justify-content-center">
+                                <button class="btn btn-outline-primary btn-sm shadow-sm"
+                                    (click)="editUsuario(usuario)" title="Editar información">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+
+                                <button class="btn btn-outline-danger btn-sm shadow-sm"
+                                    (click)="deleteUsusario(usuario.id)" title="Eliminar usuario">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -78,18 +86,17 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="roles" class="form-label">Roles</label>
-                            <select id="roles" class="form-select" formControlName="roles">
-                                <option *ngFor="let rol of roles" [value]="rol">
-                                    {{ transformarRol(rol) }}
-                                </option>
+                            <label for="rol" class="form-label">Rol</label>
+                            <select id="rol" class="form-select" formControlName="rol">
+                                <option value="ADMIN">Administrador</option>
+                                <option value="USER">Usuario</option>
                             </select>
                             <div class="form-text">
                                 Seleccione un rol para el usuario
                             </div>
-                            <div *ngIf="usuarioForm.get('roles')?.invalid && usuarioForm.get('roles')?.touched"
+                            <div *ngIf="usuarioForm.get('rol')?.invalid && usuarioForm.get('rol')?.touched"
                                 class="text-danger small mt-1">
-                                <span *ngIf="usuarioForm.get('roles')?.errors?.['required']">
+                                <span *ngIf="usuarioForm.get('rol')?.errors?.['required']">
                                     Al menos un rol es requerido
                                 </span>
                             </div>

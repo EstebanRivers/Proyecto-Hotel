@@ -17,9 +17,9 @@ public enum EstadoReserva {
 	
 	public static EstadoReserva fromCodigo(Long codigo) {
         for (EstadoReserva e : values()) {
-            if (e.codigo == codigo) {
-                return e;
-            }
+        	if (e.codigo.equals(codigo)) {
+				return e;
+			}
         }
         throw new IllegalArgumentException("Código de reserva no válido: " + codigo);
     }

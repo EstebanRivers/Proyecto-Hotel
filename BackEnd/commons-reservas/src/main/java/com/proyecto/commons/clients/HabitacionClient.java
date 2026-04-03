@@ -22,5 +22,4 @@ public interface HabitacionClient {
 	
 	@PutMapping("/{idHabitacion}/estadoHabitacion/{idEstadoHabitacion}")
 	HabitacionResponse cambiarEstadoHabitacionManual(@PathVariable Long idHabitacion, @PathVariable Long idEstadoHabitacion);
-
 }

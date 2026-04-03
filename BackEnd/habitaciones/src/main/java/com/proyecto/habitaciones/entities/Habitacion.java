@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -29,7 +28,6 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table (name="HABITACIONES")
-
 public class Habitacion {
 	
 	@Id
@@ -40,11 +38,11 @@ public class Habitacion {
 	@Column(name = "NUMERO", nullable = false)
 	private Integer numero;
 
-	@Column(name = "TIPO", nullable = false)
+	@Column(name = "TIPO",  nullable = false, length = 50)
 	private String tipo;
 
     @Column(name = "CAPACIDAD", nullable = false)
-    private Integer capacidad;
+    private Short capacidad;
 
     @Column(name = "PRECIO", nullable = false)
     private BigDecimal precio;

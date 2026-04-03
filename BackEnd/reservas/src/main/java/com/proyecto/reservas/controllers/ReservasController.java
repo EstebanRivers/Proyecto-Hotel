@@ -21,11 +21,10 @@ public class ReservasController extends CommonController<ReservaRequest, Reserva
 
 	public ReservasController(ReservaService service) {
 		super(service);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@GetMapping("/id-reserva/{id}")
-	public ResponseEntity<ReservaResponse> obtenerReservaPorIdSinEstado(@PathVariable @Positive(message= "El ID debe ser positivo w") Long id){
+	public ResponseEntity<ReservaResponse> obtenerReservaPorIdSinEstado(@PathVariable @Positive(message= "El ID debe ser positivo") Long id){
 		return ResponseEntity.ok(service.obtenerReservaPorIdSinEstado(id));
 	}
 	
@@ -42,13 +41,12 @@ public class ReservasController extends CommonController<ReservaRequest, Reserva
 	}
 	
 	@GetMapping("/habitacion/{idHabitacion}/tiene-reservas")
-	public ResponseEntity<Boolean> habitacionTieneReservasActivas(@PathVariable @Positive Long idHabidacion) {
-	    return ResponseEntity.ok(service.habitacionTieneReservas(idHabidacion));
+	public ResponseEntity<Boolean> habitacionTieneReservasActivas(@PathVariable @Positive Long idHabitacion) {
+	    return ResponseEntity.ok(service.habitacionTieneReservas(idHabitacion));
 	}
 
 	@GetMapping("/huesped/{idHuesped}/tiene-reservas")
 	public ResponseEntity<Boolean> huespedTieneReservasActivas(@PathVariable @Positive Long idHuesped) {
 	    return ResponseEntity.ok(service.huespedTieneReservas(idHuesped));
 	}
-
 }

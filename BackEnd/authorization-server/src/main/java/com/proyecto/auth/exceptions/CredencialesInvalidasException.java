@@ -1,4 +1,4 @@
-package com.proyecto.commons.exceptions;
+package com.proyecto.auth.exceptions;
 
 public class CredencialesInvalidasException extends RuntimeException {
 

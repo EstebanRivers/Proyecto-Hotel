@@ -40,29 +40,31 @@ public class ReservaMapper implements CommonMapper<ReservaRequest, ReservaRespon
 				null, 
 				entity.getFechaEntrada(), 
 				entity.getFechaSalida(), 
-				entity.getEstadoReserva().getDescripcion() );
+				entity.getEstadoReserva());
 	}
+	
 	public ReservaResponse entityToResponse(Reserva entity, HuespedResponse huesped) {
 		if(entity == null) return null;
 		
 		return new ReservaResponse(
 				entity.getId(), 
-				huepsedResponseToDatosHuesped(huesped), 
+				huespedResponseToDatosHuesped(huesped), 
 				null, 
 				entity.getFechaEntrada(), 
 				entity.getFechaSalida(), 
-				entity.getEstadoReserva().getDescripcion() );
+				entity.getEstadoReserva());
 	}
+	
 	public ReservaResponse entityToResponse(Reserva entity, HuespedResponse huesped, HabitacionResponse habitacion) {
 		if(entity == null) return null;
 		
 		return new ReservaResponse(
 				entity.getId(), 
-				huepsedResponseToDatosHuesped(huesped), 
+				huespedResponseToDatosHuesped(huesped), 
 				habitacionResponseToDatosHabitacion(habitacion), 
 				entity.getFechaEntrada(), 
 				entity.getFechaSalida(), 
-				entity.getEstadoReserva().getDescripcion() );
+				entity.getEstadoReserva());
 	}
 
 	@Override
@@ -85,22 +87,24 @@ public class ReservaMapper implements CommonMapper<ReservaRequest, ReservaRespon
 		return entity;
 	}
 	
-	private DatosHuesped huepsedResponseToDatosHuesped(HuespedResponse huesped) {
+	private DatosHuesped huespedResponseToDatosHuesped(HuespedResponse huesped) {
 		if (huesped == null) return null;
 		
 		return new DatosHuesped(
+				huesped.id(),
 				huesped.nombre(),
-				huesped.edad() + " años",
+				huesped.edad(),
 				huesped.nacionalidad(),
-				huesped.documento(),
 				huesped.email(),
-				huesped.telefono());
+				huesped.telefono(),
+				huesped.documento());
 	}
 	
 	private DatosHabitacion habitacionResponseToDatosHabitacion(HabitacionResponse habitacion) {
 		if (habitacion == null) return null;
 		
 		return new DatosHabitacion(
+				habitacion.id(),
 				habitacion.numero(),
 				habitacion.tipo(),
 				habitacion.precio(),

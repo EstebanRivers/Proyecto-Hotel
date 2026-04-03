@@ -15,7 +15,7 @@ public record ReservaRequest(
 		Long idHuesped,
 		
 		@NotNull(message = "El id de la habitacion es requerida")
-		@Positive(message = "El id de la habitacion debe ser positiva")
+		@Positive(message = "El id de la habitacion debe ser positivo")
 		Long idHabitacion,
 		
 		@NotNull(message = "La fecha de la reservacion es requerida")

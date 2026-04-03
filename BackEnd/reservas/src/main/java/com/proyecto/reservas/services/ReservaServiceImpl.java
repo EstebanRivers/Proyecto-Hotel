@@ -24,7 +24,6 @@ import com.proyecto.reservas.repositories.ReservaRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -182,7 +181,7 @@ public class ReservaServiceImpl implements ReservaService{
 	}
 	
 	private void validarDisponibilidadHabitacion(HabitacionResponse habitacion) {
-	    if (!habitacion.estadoHabitacion().equals(EstadoHabitacion.DISPONIBLE.getDescripcion())) {
+	    if (habitacion.estadoHabitacion() != EstadoHabitacion.DISPONIBLE) {
 	        throw new IllegalStateException("No se puede elegir esta habitacion ya que no esta disponible");
 	    }
 	}
@@ -230,7 +229,7 @@ public class ReservaServiceImpl implements ReservaService{
     }
 	
 	private void validarEstadoReservaAlActualizar(Reserva reserva) {
-	    if (reserva.getEstadoReserva() == EstadoReserva.FINALIZADA && reserva.getEstadoReserva() == EstadoReserva.CANCELADA) {
+	    if (reserva.getEstadoReserva() == EstadoReserva.FINALIZADA || reserva.getEstadoReserva() == EstadoReserva.CANCELADA) {
 	        throw new IllegalStateException("La Reservacion no puede actualizarse en estados de FINALIZADA o CANCELADA");
 	    }
 	}
@@ -297,5 +296,4 @@ public class ReservaServiceImpl implements ReservaService{
 					EstadoReserva.EN_CURSO.getDescripcion());
 		}
 	}
-
 }

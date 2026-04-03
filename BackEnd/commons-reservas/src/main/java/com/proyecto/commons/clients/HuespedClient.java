@@ -15,6 +15,4 @@ public interface HuespedClient {
 	
 	@GetMapping("/id-huesped/{id}")
 	HuespedResponse obtenerHuespedPorIdSinEstado(@PathVariable Long id);
-	
-	
 }

@@ -14,5 +14,4 @@ public interface ReservaService extends CrudService<ReservaRequest, ReservaRespo
 	boolean huespedTieneReservas(Long idHuesped);
 	
 	boolean habitacionTieneReservas(Long idHabitacion);
-
 }

@@ -10,8 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.proyecto.auth.entities.Usuario;
+import com.proyecto.auth.enums.EstadoRegistro;
 import com.proyecto.auth.repositories.UsuarioRepository;
-import com.proyecto.commons.enums.EstadoRegistro;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -14,8 +14,8 @@ spring:
       server:
         webflux:
           routes:
-            - id: auth-server
-              uri: lb://authorization-server
+            - id: authorization-server
+              uri: http://localhost:9000
               predicates:
                 - Path=/api/login/**
 

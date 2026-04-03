@@ -15,7 +15,7 @@
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/dashboard/reservas" routerLinkActive="active">Reservas</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" *ngIf="showMenuAdmin">
                     <a class="nav-link" routerLink="/dashboard/usuarios" routerLinkActive="active">Usuarios</a>
                 </li>
             </ul>
@@ -23,12 +23,12 @@
         <div class="d-flex align-items-center">
             <span class="text-light me-2 d-flex align-items-center">
                 <i class="fas fa-user me-2"></i>
-                <!-- <span *ngIf="username">Hola, {{ username }}!</span> -->
+                <span *ngIf="username">Hola, {{ username }}!</span>
             </span>
-            <!-- <button class="btn btn-outline-light btn-sm d-flex align-items-center" (click)="logout()">
+            <button class="btn btn-outline-light btn-sm d-flex align-items-center" (click)="logout()">
                 <i class="fas fa-sign-out-alt me-2"></i>
                 Cerrar sesión
-            </button>  -->
+            </button>
         </div>
     </div>
 </nav>

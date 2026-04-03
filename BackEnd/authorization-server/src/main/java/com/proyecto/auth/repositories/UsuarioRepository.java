@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.proyecto.auth.entities.Usuario;
-import com.proyecto.commons.enums.EstadoRegistro;
+import com.proyecto.auth.enums.EstadoRegistro;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {

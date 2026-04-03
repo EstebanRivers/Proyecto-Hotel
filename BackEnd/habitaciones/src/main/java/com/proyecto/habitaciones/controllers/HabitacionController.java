@@ -20,22 +20,26 @@ public class HabitacionController extends CommonController<HabitacionRequest, Ha
 
 	public HabitacionController(HabitacionService service) {
 		super(service);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@GetMapping("/id-habitacion/{id}")
-	public ResponseEntity<HabitacionResponse> obtenerHabitacionPorIdSinEstado(@PathVariable @Positive(message= "El ID debe ser positivo w") Long id){
+	public ResponseEntity<HabitacionResponse> obtenerHabitacionPorIdSinEstado(@PathVariable @Positive(message= "El ID debe ser positivo") Long id){
 		return ResponseEntity.ok(service.obtenerHabitacionPorIdSinEstado(id));
 	}
 	
 	@PutMapping("/interno/{idHabitacion}/estadoHabitacion/{idEstadoHabitacion}")
-    public ResponseEntity<HabitacionResponse> cambiarDisponibilidad(@PathVariable Long idHabitacion, @PathVariable Long idEstadoHabitacion) {
-        return ResponseEntity.ok(service.cambiarEstadoHabitacion(idHabitacion, idEstadoHabitacion));
-    }
+	public ResponseEntity<HabitacionResponse> cambiarDisponibilidad(
+			@PathVariable @Positive(message= "El ID de la habitación debe ser positivo") Long idHabitacion, 
+			@PathVariable @Positive(message= "El ID del estado debe ser positivo") Long idEstadoHabitacion) {
+		
+		return ResponseEntity.ok(service.cambiarEstadoHabitacion(idHabitacion, idEstadoHabitacion));
+	}
 
-    @PutMapping("/{idHabitacion}/estadoHabitacion/{idEstadoHabitacion}")
-    public ResponseEntity<HabitacionResponse> cambiarDisponibilidadManual(@PathVariable Long idHabitacion, @PathVariable Long idEstadoHabitacion) {
-    	return ResponseEntity.ok(service.cambiarEstadoHabitacionManual(idHabitacion, idEstadoHabitacion));
-    }
-
+	@PutMapping("/{idHabitacion}/estadoHabitacion/{idEstadoHabitacion}")
+	public ResponseEntity<HabitacionResponse> cambiarDisponibilidadManual(
+			@PathVariable @Positive(message= "El ID de la habitación debe ser positivo") Long idHabitacion, 
+			@PathVariable @Positive(message= "El ID del estado debe ser positivo") Long idEstadoHabitacion) {
+		
+		return ResponseEntity.ok(service.cambiarEstadoHabitacionManual(idHabitacion, idEstadoHabitacion));
+	}
 }

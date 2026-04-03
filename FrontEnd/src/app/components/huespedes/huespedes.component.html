@@ -17,7 +17,6 @@
                         <th scope="col">Teléfono</th>
                         <th scope="col">Documento</th>
                         <th scope="col">Nacionalidad</th>
-                        <th scope="col">Disponibilidad</th>
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
@@ -30,14 +29,18 @@
                         <td>{{ huesped.telefono }}</td>
                         <td>{{ huesped.documento }}</td>
                         <td>{{ huesped.nacionalidad }}</td>
-                        <td>{{ huesped.estadoRegistro }}</td>
                         <td *ngIf="showActions">
-                            <button class="btn btn-primary btn-sm" (click)="editHuesped(huesped)">
-                                <i class="fa fa-edit"></i>
-                            </button>
-                            <button class="btn btn-danger btn-sm" (click)="deleteHuesped(huesped.id)">
-                                <i class="fa fa-trash"></i>
-                            </button>
+                            <div class="d-flex gap-2 justify-content-center">
+                                <button class="btn btn-outline-primary btn-sm shadow-sm" (click)="editHuesped(huesped)"
+                                    title="Editar información">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+
+                                <button class="btn btn-outline-danger btn-sm shadow-sm"
+                                    (click)="deleteHuesped(huesped.id)" title="Eliminar huesped">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -78,7 +81,8 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Apellido paterno</label>
-                                <input class="form-control" formControlName="apellidoPaterno" autocomplete="false" placeholder="Apellido materno del huésped">
+                                <input class="form-control" formControlName="apellidoPaterno" autocomplete="false"
+                                    placeholder="Apellido materno del huésped">
                                 <div *ngIf="huespedForm.get('apellidoPaterno')?.invalid && huespedForm.get('apellidoPaterno')?.touched"
                                     class="text-danger small mt-1">
                                     <span *ngIf="huespedForm.get('apellidoPaterno')?.errors?.['required']">
@@ -97,7 +101,8 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Apellido materno</label>
-                                <input class="form-control" formControlName="apellidoMaterno" autocomplete="false" placeholder="Apellido paterno del huésped">
+                                <input class="form-control" formControlName="apellidoMaterno" autocomplete="false"
+                                    placeholder="Apellido paterno del huésped">
                                 <div *ngIf="huespedForm.get('apellidoMaterno')?.invalid && huespedForm.get('apellidoMaterno')?.touched"
                                     class="text-danger small mt-1">
                                     <span *ngIf="huespedForm.get('apellidoMaterno')?.errors?.['required']">
@@ -118,11 +123,15 @@
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Edad</label>
-                                <input type="number" class="form-control" formControlName="edad" min="18" max="100" placeholder="Edad del huésped">
+                                <input type="number" class="form-control" formControlName="edad" min="18" max="100"
+                                    placeholder="Edad del huésped">
                                 <div *ngIf="huespedForm.get('edad')?.invalid && huespedForm.get('edad')?.touched"
                                     class="text-danger small mt-1">
                                     <span *ngIf="huespedForm.get('edad')?.errors?.['required']">
                                         La edad es requerido
+                                    </span>
+                                    <span *ngIf="huespedForm.get('edad')?.errors?.['pattern']">
+                                        La edad debe ser positivo mayor a 18
                                     </span>
                                     <span *ngIf="huespedForm.get('edad')?.errors?.['max']">
                                         La edad máxima son 100 años
@@ -134,7 +143,8 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Email</label>
-                                <input type="email" class="form-control" formControlName="email" placeholder="Email del huésped">
+                                <input type="email" class="form-control" formControlName="email"
+                                    placeholder="Email del huésped">
                                 <div *ngIf="huespedForm.get('email')?.invalid && huespedForm.get('email')?.touched"
                                     class="text-danger small mt-1">
                                     <span *ngIf="huespedForm.get('email')?.errors?.['required']">
@@ -150,11 +160,12 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Teléfono</label>
-                                <input class="form-control" formControlName="telefono" minlength="10" maxlength="10" placeholder="Teléfono del huésped">
+                                <input class="form-control" formControlName="telefono" minlength="10" maxlength="10"
+                                    placeholder="Teléfono del huésped">
                                 <div *ngIf="huespedForm.get('telefono')?.invalid && huespedForm.get('telefono')?.touched"
                                     class="text-danger small mt-1">
                                     <span *ngIf="huespedForm.get('telefono')?.errors?.['required']">
-                                        El teléfono es requerido 
+                                        El teléfono es requerido
                                     </span>
                                     <span *ngIf="huespedForm.get('telefono')?.errors?.['pattern']">
                                         El teléfono debe ser númerico <br>
@@ -167,12 +178,58 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Documento</label>
-                                <input class="form-control" formControlName="documento" placeholder="Documento del huésped">
+                                <label class="form-label">Tipo documento</label>
+                                <div class="input-group">
+                                    <select class="form-select" style="max-width: 120px;"
+                                        formControlName="tipoDocumento">
+                                        <option value="INE">INE</option>
+                                        <option value="PASS">Pasaporte</option>
+                                        <option value="CM">Cartilla Militar</option>
+                                    </select>
+                                    <input type="text" class="form-control" formControlName="documento"
+                                        placeholder="Número de documento">
+                                </div>
+                                <div *ngIf="huespedForm.get('tipoDocumento')?.invalid && huespedForm.get('tipoDocumento')?.touched"
+                                    class="text-danger small mt-1">
+                                    <span *ngIf="huespedForm.get('tipoDocumento')?.errors?.['required']">
+                                        El tipo de documento es requerido
+                                    </span>
+                                </div>
+                                <div *ngIf="huespedForm.get('documento')?.invalid && huespedForm.get('documento')?.touched"
+                                    class="text-danger small mt-1">
+                                    <span *ngIf="huespedForm.get('documento')?.errors?.['required']">
+                                        El documento es requerido
+                                    </span>
+                                    <span *ngIf="huespedForm.get('documento')?.errors?.['pattern']">
+                                        El documento debe contener solo letras y espacios
+                                    </span>
+                                    <span *ngIf="huespedForm.get('documento')?.errors?.['minlength']">
+                                        Mínimo 2 caracteres
+                                    </span>
+                                    <span *ngIf="huespedForm.get('documento')?.errors?.['maxlength']">
+                                        Máximo 50 caracteres
+                                    </span>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Nacionalid</label>
-                                <input class="form-control" formControlName="nacionalidad" placeholder="Nacionalidad del huésped">
+                                <input class="form-control" formControlName="nacionalidad"
+                                    placeholder="Nacionalidad del huésped">
+                                <div *ngIf="huespedForm.get('nacionalidad')?.invalid && huespedForm.get('nacionalidad')?.touched"
+                                    class="text-danger small mt-1">
+                                    <span *ngIf="huespedForm.get('nacionalidad')?.errors?.['required']">
+                                        La nacionalidad es requerido
+                                    </span>
+                                    <span *ngIf="huespedForm.get('nacionalidad')?.errors?.['pattern']">
+                                        La nacionalidad debe contener solo letras y espacios
+                                    </span>
+                                    <span *ngIf="huespedForm.get('nacionalidad')?.errors?.['minlength']">
+                                        Mínimo 2 caracteres
+                                    </span>
+                                    <span *ngIf="huespedForm.get('nacionalidad')?.errors?.['maxlength']">
+                                        Máximo 50 caracteres
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div class="text-end">
