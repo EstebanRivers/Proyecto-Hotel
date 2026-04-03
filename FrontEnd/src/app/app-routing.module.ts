@@ -7,7 +7,8 @@ import { HabitacionesComponent } from './components/habitaciones/habitaciones.co
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
-import { Roles } from './constants/Roles';
+import { Rol } from './constants/Rol';
+
 
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -16,7 +17,7 @@ const routes: Routes = [
     {path: 'huespedes', component: HuespedesComponent, canActivate: [AuthGuard]},
     {path: 'habitaciones', component: HabitacionesComponent, canActivate: [AuthGuard]},
     {path: 'reservas', component: ReservasComponent, canActivate: [AuthGuard]},
-    {path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard], data: { roles: [Roles.ADMIN]}}
+    {path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard], data: { Rol: [Rol.ADMIN]}}
   ]},
   {path: '**', redirectTo: 'dashboard'}
 ];

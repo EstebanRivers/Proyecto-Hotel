@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
-import { Roles } from '../../../constants/Roles';
+import { Rol } from '../../../constants/Rol';
+
 
 @Component({
   selector: 'app-navbar',
@@ -17,7 +18,7 @@ export class NavbarComponent {
 
   ngOnInit(): void {
     this.username = this.authService.getUsername();
-    if(this.authService.hasRole(Roles.ADMIN)) {
+    if(this.authService.hasRole(Rol.ADMIN)) {
       this.showMenuAdmin = true;
     }
   }

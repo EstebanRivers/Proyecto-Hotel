@@ -24,7 +24,7 @@
                         <td>{{ habitacion.id }}</td>
                         <td>{{ habitacion.numero }}</td>
                         <td>{{ habitacion.tipo }}</td>
-                        <td>{{ habitacion.precio }}</td>
+                        <td>{{ '$ ' + habitacion.precio }}</td>
                         <td>{{ habitacion.capacidad }}</td>
                         <td>{{ habitacion.estadoHabitacion }}</td>
                         <td *ngIf="showActions">
@@ -58,7 +58,8 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Número Habitación</label>
-                                <input type="number" class="form-control" formControlName="numero" min="1" placeholder="Número de habitación">
+                                <input type="number" class="form-control" formControlName="numero" min="1"
+                                    placeholder="Número de habitación">
                                 <div *ngIf="habitacionForm.get('numero')?.invalid && habitacionForm.get('numero')?.touched"
                                     class="text-danger small mt-1">
                                     <span *ngIf="habitacionForm.get('numero')?.errors?.['required']">
@@ -68,7 +69,7 @@
                                         El número debe ser positivo mayor a 0 <br>
                                     </span>
                                     <span *ngIf="habitacionForm.get('numero')?.errors?.['min']">
-                                        El número de habitación debe ser mayor a 0                                 
+                                        El número de habitación debe ser mayor a 0
                                     </span>
                                 </div>
                             </div>
@@ -91,20 +92,22 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Precio Habitación</label>
-                                <input type="number" class="form-control" formControlName="precio" min="1" placeholder="Precio habitación">
+                                <input type="number" class="form-control" formControlName="precio" min="1"
+                                    placeholder="Precio habitación">
                                 <div *ngIf="habitacionForm.get('precio')?.invalid && habitacionForm.get('precio')?.touched"
                                     class="text-danger small mt-1">
                                     <span *ngIf="habitacionForm.get('precio')?.errors?.['required']">
                                         El precio de la habitación es requerido
                                     </span>
                                     <span *ngIf="habitacionForm.get('precio')?.errors?.['min']">
-                                        El precio de la habitación debe ser mayor a 0                                   
+                                        El precio de la habitación debe ser mayor a 0
                                     </span>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Capacidad Habitación</label>
-                                <input type="number" class="form-control" formControlName="capacidad" min="1" placeholder="Capacidad habitación">
+                                <input type="number" class="form-control" formControlName="capacidad" min="1"
+                                    placeholder="Capacidad habitación">
                                 <div *ngIf="habitacionForm.get('capacidad')?.invalid && habitacionForm.get('capacidad')?.touched"
                                     class="text-danger small mt-1">
                                     <span *ngIf="habitacionForm.get('capacidad')?.errors?.['required']">
@@ -114,9 +117,26 @@
                                         La capacidad máxima es 10
                                     </span>
                                     <span *ngIf="habitacionForm.get('capacidad')?.errors?.['min']">
-                                        La capacidad mínima debe ser mayor a 0                                   
+                                        La capacidad mínima debe ser mayor a 0
                                     </span>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="isEditMode">
+                            <div class="col-md-6 mb-3">
+                                <label for="idEstadoHabitacion" class="form-label">Estado habitación</label>
+                                <select id="idEstadoHabitacion" class="form-select" formControlName="idEstadoHabitacion">
+                                    <option value="1">Disponible</option>
+                                    <option value="2">Ocupada</option>
+                                    <option value="3">Limpieza  </option>
+                                    <option value="4">Mantenimiento</option>
+                                </select>
+                                <!-- <div *ngIf="habitacionForm.get('idEstadoHabitacion')?.invalid && habitacionForm.get('idEstadoHabitacion')?.touched"
+                                    class="text-danger small mt-1">
+                                    <span *ngIf="habitacionForm.get('idEstadoHabitacion')?.errors?.['required']">
+                                        El estado habitación es requerido
+                                    </span>
+                                </div> -->
                             </div>
                         </div>
                         <div class="text-end">

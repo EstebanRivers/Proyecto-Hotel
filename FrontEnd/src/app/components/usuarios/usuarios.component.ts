@@ -4,7 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UsuariosService } from '../../services/usuario.service';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
-import { DescripcionRol, Roles } from '../../constants/Roles';
+import { DescripcionRol, Rol } from '../../constants/Rol';
+
 declare var bootstrap: any;
 
 @Component({
@@ -22,7 +23,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
   showActions: boolean = false;
   modalText: string = 'Registrar huésped';
 
-  roles: string[] = Object.values(Roles);
+  rol: string[] = Object.values(Rol);
 
   @ViewChild('usuarioModalRef')
   usuarioModalEl!: ElementRef;
@@ -36,13 +37,13 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
     this.usuarioForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]],
-      roles: [[], [Validators.required]]
+      rol: ['', [Validators.required]]
     })
   }
 
   ngOnInit(): void {
     this.listarUsuarios();
-    if(this.authService.hasRole(Roles.ADMIN)){
+    if(this.authService.hasRole(Rol.ADMIN)){
       this.showActions = true;
     } 
   }
@@ -75,7 +76,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
   }
 
    transformarRol(rol: string): string{
-    return DescripcionRol[rol as Roles] || 'Desconocido';
+    return DescripcionRol[rol as Rol] || 'Desconocido';
   }
 
   editUsuario(usuario: UsuarioResponse): void{
@@ -92,6 +93,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
 
     const usuarioData: UsuarioRequest = this.usuarioForm.value;
 
+    console.log(usuarioData);
     if(this.isEditMode && this.selectedUsuario){
       this.usuarioService.putUsuario(usuarioData, this.selectedUsuario.id).subscribe({
         next: registro => {

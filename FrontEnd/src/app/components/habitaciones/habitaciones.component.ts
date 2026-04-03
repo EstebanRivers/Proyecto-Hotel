@@ -4,7 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HabitacionesSerivice } from '../../services/habitacion.service';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
-import { Roles } from '../../constants/Roles';
+import { Rol } from '../../constants/Rol';
+
 declare var bootstrap: any;
 
 @Component({
@@ -19,7 +20,7 @@ export class HabitacionesComponent implements OnInit, AfterViewInit {
 
   isEditMode: boolean = false;
   selectedHabitacion: HabitacionResponse | null = null;
-  showActions: boolean = true;
+  showActions: boolean = false;
   modalText: string = 'Registrar Habitación';
 
   @ViewChild('habitacionModalRef')
@@ -42,7 +43,7 @@ export class HabitacionesComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.listarHabitaciones();
-    if(this.authService.hasRole(Roles.ADMIN)){
+    if(this.authService.hasRole(Rol.ADMIN)){
       this.showActions = true;
     }
   }

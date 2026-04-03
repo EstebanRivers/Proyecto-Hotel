@@ -4,7 +4,8 @@ import Swal from 'sweetalert2';
 import { HuespedRequest, HuespedResponse } from '../../models/Huesped.model';
 import { HuespedesService } from '../../services/huesped.service';
 import { AuthService } from '../../services/auth.service';
-import { Roles } from '../../constants/Roles';
+import { Rol } from '../../constants/Rol';
+
 declare var bootstrap: any;
 
 @Component({
@@ -19,7 +20,7 @@ export class HuespedesComponent implements OnInit, AfterViewInit {
 
   isEditMode: boolean = false;
   selectedHuesped: HuespedResponse | null = null;
-  showActions: boolean = true;
+  showActions: boolean = false;
   modalText: string = 'Registrar huésped';
 
   @ViewChild('huespedModalRef')
@@ -40,14 +41,15 @@ export class HuespedesComponent implements OnInit, AfterViewInit {
       edad: [null, [Validators.required, Validators.min(18), Validators.max(100)]],
       email: ['', [Validators.required, Validators.minLength(5), Validators.email, Validators.pattern(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/)]],
       telefono: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(10), Validators.pattern(/^[0-9]+$/)]],
-      documento: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(1), Validators.pattern(/^(?!\s*$).+/)]],
+      documento: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(2), Validators.pattern(/^(?!\s*$).+/)]],
+      tipoDocumento: ['', [Validators.required]],
       nacionalidad: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(1), Validators.pattern(/^(?!\s*$).+/)]]
     })
   }
 
   ngOnInit(): void {
     this.listarHuespedes();
-    if(this.authService.hasRole(Roles.ADMIN)){
+    if(this.authService.hasRole(Rol.ADMIN)){
       this.showActions = true;
     }
   }
@@ -85,16 +87,22 @@ export class HuespedesComponent implements OnInit, AfterViewInit {
     this.modalText = 'Editando huésped: ' + huesped.nombre;
 
     const nombreConcat = huesped.nombre.split(' ');
+    const documentoConcat = huesped.documento.split('_');
 
     const nombre = nombreConcat[0] || '';
     const apellidoPaterno = nombreConcat[1] || '';
     const apellidoMaterno = nombreConcat.slice(2).join(' ');
 
+    const tipoDocumento = documentoConcat[0] || '';
+    const documento = documentoConcat[1] || '';
+
     this.huespedForm.patchValue({
       ...huesped,
       nombre: nombre,
       apellidoPaterno: apellidoPaterno,
-      apellidoMaterno: apellidoMaterno
+      apellidoMaterno: apellidoMaterno,
+      tipoDocumento: tipoDocumento,
+      documento: documento
     });
     this.modalInstance.show();
   }
@@ -102,7 +110,14 @@ export class HuespedesComponent implements OnInit, AfterViewInit {
   onSubmit(): void {
     if (this.huespedForm.invalid) return;
 
-    const huespedData: HuespedRequest = this.huespedForm.value;
+    const formValue = this.huespedForm.value;
+ 
+    const huespedData: HuespedRequest = {
+      ...formValue,
+      documento: formValue.tipoDocumento + '_' + formValue.documento
+    }
+
+    console.log(huespedData);
 
     if (this.isEditMode && this.selectedHuesped) {
       this.huespedService.putHuesped(huespedData, this.selectedHuesped.id).subscribe({

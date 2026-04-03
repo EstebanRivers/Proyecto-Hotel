@@ -27,7 +27,7 @@
                         <td>{{ reserva.fechaEntrada }}</td>
                         <td>{{ reserva.fechaSalida }}</td>
                         <td>{{ reserva.estadoReserva }}</td>
-                        <td *ngIf="showActions">
+                        <td>
                             <div class="d-flex gap-2 justify-content-center">
                                 <button *ngIf="reserva.estadoReserva !== 'Reserva cancelada' && reserva.estadoReserva !== 'Check-out realizado'"
                                     class="btn btn-outline-primary btn-sm shadow-sm" (click)="editReserva(reserva)"
@@ -35,7 +35,7 @@
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </button>
 
-                                <button class="btn btn-outline-danger btn-sm shadow-sm"
+                                <button *ngIf="showActions" class="btn btn-outline-danger btn-sm shadow-sm"
                                     (click)="deleteReserva(reserva.id)" title="Eliminar reserva">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </button>
@@ -121,10 +121,10 @@
                             <div class="col-md-12 mb-3">
                                 <label for="idEstadoReserva" class="form-label">Estado de la Reserva</label>
                                 <select id="idEstadoReserva" class="form-select" formControlName="idEstadoReserva">
-                                    <option *ngIf="opcionIn" value="1">Reserva creada</option>
+                                    <option *ngIf="opcionIn" value="1">Confirmar reserva</option>
                                     <option *ngIf="opcionIn" value="2">Check-in</option>
                                     <option *ngIf="opcionOut" value="3">Check-out</option>
-                                    <option *ngIf="opcionCancel" value="4">Reserva cancelada</option>
+                                    <option *ngIf="showActions && opcionCancel" value="4">Cancelar reserva</option>
                                 </select>
                             </div>
                         </div>

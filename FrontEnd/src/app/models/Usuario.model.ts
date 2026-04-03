@@ -1,11 +1,13 @@
+import { Rol } from "../constants/Rol"
+
 export interface UsuarioRequest {
     username: string,
     password: string,
-    roles: string[]
+    rol: Rol
 }
 
 export interface UsuarioResponse {
     id: number,
     username: string,
-    roles: string[]
+    rol: Rol
 }

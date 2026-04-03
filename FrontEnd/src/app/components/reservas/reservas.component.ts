@@ -4,7 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReservasService } from '../../services/reserva.service';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
-import { Roles } from '../../constants/Roles';
+import { Rol } from '../../constants/Rol';
+
 declare var bootstrap: any;
 
 @Component({
@@ -25,7 +26,7 @@ export class ReservasComponent implements OnInit, AfterViewInit {
 
   isEditMode: boolean = false;
   selectedReserva: ReservaResponse | null = null;
-  showActions: boolean = true;
+  showActions: boolean = false;
   modalText: string = 'Registrar reserva';
 
   @ViewChild('reservaModalRef')
@@ -49,7 +50,7 @@ export class ReservasComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.listarReservas();
-    if(this.authService.hasRole(Roles.ADMIN)){
+    if(this.authService.hasRole(Rol.ADMIN)){
       this.showActions = true;
     }
   }
