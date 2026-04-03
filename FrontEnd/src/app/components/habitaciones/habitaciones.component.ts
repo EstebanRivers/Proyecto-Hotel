@@ -37,7 +37,8 @@ export class HabitacionesComponent implements OnInit, AfterViewInit {
       numero: [null, [Validators.required, Validators.min(1)]],
       tipo: ['', [Validators.required]],
       precio: [null, [Validators.required, Validators.min(1)]],
-      capacidad: [null, [Validators.required, Validators.min(1), Validators.max(10)]]
+      capacidad: [null, [Validators.required, Validators.min(1), Validators.max(10)]],
+      idEstadoHabitacion: ['']
     })
   }
 
@@ -91,6 +92,8 @@ export class HabitacionesComponent implements OnInit, AfterViewInit {
 
     const habitacionData: HabitacionRequest = this.habitacionForm.value;
 
+    console.log(habitacionData);
+
     if (this.isEditMode && this.selectedHabitacion) {
       this.habitacionService.putHabitacion(habitacionData, this.selectedHabitacion.id).subscribe({
         next: registro => {
@@ -133,4 +136,11 @@ export class HabitacionesComponent implements OnInit, AfterViewInit {
     });
   }
 
+    private mapearEstado(estado: string): number {
+    if (estado === '' || estado === '1') return 1;
+    if (estado === '2') return 2;
+    if (estado === '3') return 3;
+    if (estado === '3') return 3;
+    return 4;
+  }
 }

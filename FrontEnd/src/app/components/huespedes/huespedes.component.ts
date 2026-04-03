@@ -155,20 +155,6 @@ export class HuespedesComponent implements OnInit, AfterViewInit {
           },
           error: (error) => {
             console.error('Error al eliminar huésped:', error);
-
-            let mensajeError = 'No se pudo eliminar el huésped';
-
-            if (error.status === 500) {
-              mensajeError = 'No se puede eliminar un huésped con reserva activa';
-            } else if (error.status === 500) {
-              mensajeError = 'Error interno del servidor (500).';
-            }
-
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: mensajeError
-            });
           }
         });
       }

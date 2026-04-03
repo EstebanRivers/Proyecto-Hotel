@@ -2,7 +2,7 @@
     <div class="card shadow-sm mt-5">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <h5 class="mb-0 fw-bold">HABITACIONES</h5>
-            <button class="btn btn-success btn-sm fw-bold" (click)="toggleForm()">
+            <button class="btn btn-success btn-sm fw-bold" *ngIf="showActions" (click)="toggleForm()">
                 <i class="fa-solid fa-plus"></i>Nueva habitación
             </button>
         </div>
@@ -126,10 +126,10 @@
                             <div class="col-md-6 mb-3">
                                 <label for="idEstadoHabitacion" class="form-label">Estado habitación</label>
                                 <select id="idEstadoHabitacion" class="form-select" formControlName="idEstadoHabitacion">
-                                    <option value="1">Disponible</option>
-                                    <option value="2">Ocupada</option>
-                                    <option value="3">Limpieza  </option>
-                                    <option value="4">Mantenimiento</option>
+                                    <option [value]="1">Disponible</option>
+                                    <option [value]="2">Ocupada</option>
+                                    <option [value]="3">Limpieza  </option>
+                                    <option [value]="4">Mantenimiento</option>
                                 </select>
                                 <!-- <div *ngIf="habitacionForm.get('idEstadoHabitacion')?.invalid && habitacionForm.get('idEstadoHabitacion')?.touched"
                                     class="text-danger small mt-1">

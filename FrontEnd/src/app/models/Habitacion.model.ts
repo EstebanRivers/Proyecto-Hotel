@@ -2,7 +2,8 @@ export interface HabitacionRequest {
     numero: number,
     tipo: string,
     precio: number,
-    capacidad: number
+    capacidad: number,
+    estadoHabitacion: number
 }
 
 export interface HabitacionResponse {
