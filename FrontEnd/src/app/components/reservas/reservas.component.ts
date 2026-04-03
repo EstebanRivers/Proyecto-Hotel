@@ -17,6 +17,10 @@ export class ReservasComponent implements OnInit, AfterViewInit {
 
   listaReservas: ReservaResponse[] = [];
 
+  opcionIn: boolean = false;
+  opcionOut: boolean = false;
+  opcionCan: boolean = false;
+
   isEditMode: boolean = false;
   selectedReserva: ReservaResponse | null = null;
   showActions: boolean = true;
@@ -28,7 +32,6 @@ export class ReservasComponent implements OnInit, AfterViewInit {
 
   private modalInstance!: any;
 
-
   constructor(private fb: FormBuilder, private reservaService: ReservasService,
     private authService: AuthService
   ) {
@@ -37,7 +40,8 @@ export class ReservasComponent implements OnInit, AfterViewInit {
       idHuesped: [null, [Validators.required, Validators.min(1), Validators.pattern(/^[0-9]+$/)]],
       idHabitacion: [null, [Validators.required, Validators.min(1), Validators.pattern(/^[0-9]+$/)]],
       fechaEntrada: ['', [Validators.required]],
-      fechaSalida: ['', [Validators.required]]
+      fechaSalida: ['', [Validators.required]],
+      estadoReserva: ['']
     })
   }
 
@@ -81,32 +85,24 @@ export class ReservasComponent implements OnInit, AfterViewInit {
     this.selectedReserva = reserva;
     this.modalText = 'Editando reserva: ' + reserva.id;
 
-    this.reservaForm.patchValue({ ...reserva });
+    this.reservaForm.get('idHuesped')?.clearValidators();
+    this.reservaForm.get('idHabitacion')?.clearValidators();
+    
+    this.reservaForm.patchValue({
+      ...reserva,
+      fechaEntrada: this.formatoSalida(reserva.fechaEntrada),
+      fechaSalida: this.formatoSalida(reserva.fechaSalida)
+    });
     this.modalInstance.show();
-  }
-
-  private formato(fechaInput: string): string {
-    if (!fechaInput) return '';
-
-    const fecha = new Date(fechaInput);
-
-    const dia = String(fecha.getDate()).padStart(2, '0');
-    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
-    const anio = fecha.getFullYear();
-    const horas = String(fecha.getHours()).padStart(2, '0');
-    const minutos = String(fecha.getMinutes()).padStart(2, '0');
-
-    return `${dia}/${mes}/${anio} ${horas}:${minutos}`;
   }
 
   onSubmit(): void {
     if (this.reservaForm.invalid) return;
-    
     const formValue = this.reservaForm.value;
     const reservaData: ReservaRequest = {
       ...formValue,
-      fechaEntrada: this.formato(formValue.fechaEntrada),
-      fechaSalida: this.formato(formValue.fechaSalida)
+      fechaEntrada: this.formatoEntrada(formValue.fechaEntrada),
+      fechaSalida: this.formatoEntrada(formValue.fechaSalida)
     };
     if (this.isEditMode && this.selectedReserva) {
       this.reservaService.putReserva(reservaData, this.selectedReserva.id).subscribe({
@@ -148,6 +144,24 @@ export class ReservasComponent implements OnInit, AfterViewInit {
         });
       }
     });
+  }
+
+  private formatoSalida(dateStr: string): string {
+    if (!dateStr) return '';
+    const [fecha, hora] = dateStr.split(' ');
+    const [dia, mes, anio] = fecha.split('/');
+    return `${anio}-${mes}-${dia}T${hora}`;
+  }
+
+  private formatoEntrada(fechaInput: string): string {
+    if (!fechaInput) return '';
+    const fecha = new Date(fechaInput);
+    const dia = String(fecha.getDate()).padStart(2, '0');
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+    const anio = fecha.getFullYear();
+    const horas = String(fecha.getHours()).padStart(2, '0');
+    const minutos = String(fecha.getMinutes()).padStart(2, '0');
+    return `${dia}/${mes}/${anio} ${horas}:${minutos}`;
   }
 
 }

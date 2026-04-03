@@ -55,7 +55,7 @@
                 </div>
                 <div class="modal-body">
                     <form [formGroup]="reservaForm" (ngSubmit)="onSubmit()">
-                        <div class="row">
+                        <div class="row" *ngIf="!isEditMode">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">ID huésped</label>
                                 <input type="number" min="1" class="form-control" formControlName="idHuesped"
@@ -77,7 +77,7 @@
                                 <label class="form-label">ID habitación</label>
                                 <input type="number" min="1" class="form-control" formControlName="idHabitacion"
                                     placeholder="ID Habitación">
-                                     <div *ngIf="reservaForm.get('idHabitacion')?.invalid && reservaForm.get('idHabitacion')?.touched"
+                                <div *ngIf="reservaForm.get('idHabitacion')?.invalid && reservaForm.get('idHabitacion')?.touched"
                                     class="text-danger small mt-1">
                                     <span *ngIf="reservaForm.get('idHabitacion')?.errors?.['required']">
                                         El ID habitación es requerido
@@ -93,33 +93,40 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Fecha de Entrada</label>
+                                <label class="form-label">Fecha entrada</label>
                                 <input type="datetime-local" class="form-control" formControlName="fechaEntrada"
                                     [class.is-invalid]="reservaForm.get('fechaEntrada')?.touched && reservaForm.get('fechaEntrada')?.invalid">
 
                                 <div class="invalid-feedback">
                                     <span *ngIf="reservaForm.get('fechaEntrada')?.errors?.['required']">
-                                        La fecha de la reservación es requerida.
-                                    </span>
-                                    <span *ngIf="reservaForm.get('fechaEntrada')?.errors?.['notFuture']">
-                                        La fecha de la reservación debe ser futura o presente.
+                                        La fecha de entrad es requerida.
                                     </span>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Fecha de Salida</label>
+                                <label class="form-label">Fecha salida</label>
                                 <input type="datetime-local" class="form-control" formControlName="fechaSalida"
                                     [class.is-invalid]="reservaForm.get('fechaSalida')?.touched && (reservaForm.get('fechaSalida')?.invalid || reservaForm.errors?.['invalidRange'])">
 
                                 <div class="invalid-feedback">
                                     <span *ngIf="reservaForm.get('fechaSalida')?.errors?.['required']">
-                                        La fecha de la reservación es requerida.
+                                        La fecha de reservación es requerida.
                                     </span>
-                                    <span *ngIf="reservaForm.get('fechaSalida')?.errors?.['notFuture']">
-                                        La fecha de la reservación debe ser futura.
-                                    </span>
-                                    <span *ngIf="reservaForm.errors?.['invalidRange']">
-                                        La fecha de salida debe ser posterior a la de entrada.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="isEditMode">
+                            <div class="col-md-12 mb-3">
+                                <label for="estadoReserva" class="form-label">Estado de la Reserva</label>
+                                <select id="estadoReserva" class="form-select" formControlName="estadoReserva">
+                                    <option  value="2">Check-in</option>
+                                    <option  value="3">Check-out</option>
+                                    <option  value="4">Cancelada</option>
+                                </select>
+                                <div *ngIf="reservaForm.get('estadoReserva')?.invalid && reservaForm.get('estadoReserva')?.touched"
+                                    class="text-danger small mt-1">
+                                    <span *ngIf="reservaForm.get('estadoReserva')?.errors?.['required']">
+                                        El estado de habitación es requerido
                                     </span>
                                 </div>
                             </div>

@@ -78,7 +78,9 @@ export class HabitacionesComponent implements OnInit, AfterViewInit {
     this.selectedHabitacion = habitacion;
     this.modalText = 'Editando habitación: ' + habitacion.numero;
 
-    this.habitacionForm.patchValue({ ...habitacion });
+    this.habitacionForm.patchValue({ ...habitacion,
+      tipo: habitacion.tipo
+    });
     this.modalInstance.show();
   }
 
