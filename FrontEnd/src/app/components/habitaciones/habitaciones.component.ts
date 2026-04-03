@@ -5,6 +5,7 @@ import { HabitacionesSerivice } from '../../services/habitacion.service';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
 import { Rol } from '../../constants/Rol';
+import { formatNumber } from '@angular/common';
 
 declare var bootstrap: any;
 
@@ -38,13 +39,13 @@ export class HabitacionesComponent implements OnInit, AfterViewInit {
       tipo: ['', [Validators.required]],
       precio: [null, [Validators.required, Validators.min(1)]],
       capacidad: [null, [Validators.required, Validators.min(1), Validators.max(10)]],
-      idEstadoHabitacion: ['']
+      idEstadoHabitacion: [1]
     })
   }
 
   ngOnInit(): void {
     this.listarHabitaciones();
-    if(this.authService.hasRole(Rol.ADMIN)){
+    if (this.authService.hasRole(Rol.ADMIN)) {
       this.showActions = true;
     }
   }
@@ -81,8 +82,10 @@ export class HabitacionesComponent implements OnInit, AfterViewInit {
     this.selectedHabitacion = habitacion;
     this.modalText = 'Editando habitación: ' + habitacion.numero;
 
-    this.habitacionForm.patchValue({ ...habitacion,
-      tipo: habitacion.tipo
+    this.habitacionForm.patchValue({
+      ...habitacion,
+      tipo: habitacion.tipo,
+      idEstadoHabitacion: this.mapearEstado(habitacion.estadoHabitacion)
     });
     this.modalInstance.show();
   }
@@ -90,8 +93,11 @@ export class HabitacionesComponent implements OnInit, AfterViewInit {
   onSubmit(): void {
     if (this.habitacionForm.invalid) return;
 
-    const habitacionData: HabitacionRequest = this.habitacionForm.value;
-
+    const formValue = this.habitacionForm.value;
+    
+    const habitacionData: HabitacionRequest = {
+      ...formValue
+    }
     console.log(habitacionData);
 
     if (this.isEditMode && this.selectedHabitacion) {
@@ -135,12 +141,12 @@ export class HabitacionesComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
-    private mapearEstado(estado: string): number {
-    if (estado === '' || estado === '1') return 1;
-    if (estado === '2') return 2;
-    if (estado === '3') return 3;
-    if (estado === '3') return 3;
-    return 4;
+  
+   private mapearEstado(estado: string): string {
+    if (estado === 'Lista para asignarse') return '1';
+    if(estado === 'Asignada a una reserva') return '2';
+    if (estado === 'En limpieza') return '3';
+    if (estado === 'En reparación') return '4';
+    return '1';
   }
 }

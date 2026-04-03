@@ -3,7 +3,7 @@ export interface HabitacionRequest {
     tipo: string,
     precio: number,
     capacidad: number,
-    estadoHabitacion: number
+    idEstadoHabitacion: number
 }
 
 export interface HabitacionResponse {
@@ -12,5 +12,5 @@ export interface HabitacionResponse {
     tipo: string,
     precio: number, 
     capacidad: number,
-    estadoHabitacion: number
+    estadoHabitacion: string
 }
